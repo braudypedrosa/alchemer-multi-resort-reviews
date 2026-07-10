@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: Alchemer Review Carousel
- * Plugin URI: https://example.com/alchemer-review-carousel
+ * Plugin URI: https://example.com/amrr-review-carousel
  * Description: A plugin to display customer reviews from Alchemer in multiple layouts
  * Version: 2.1.0
  * Author: Braudy Pedrosa
  * Author URI: https://example.com
- * Text Domain: alchemer-review-carousel
+ * Text Domain: amrr-review-carousel
  */
 
 // Exit if accessed directly
@@ -14,33 +14,38 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Alchemer_Review_Carousel {
+class AMRR_Review_Carousel {
     
     /**
      * Constructor
      */
     public function __construct() {
         // Register shortcodes
-        add_shortcode('alchemer_reviews_list', array($this, 'display_reviews_list'));
-        add_shortcode('alchemer_reviews_grid', array($this, 'display_reviews_grid'));
-        add_shortcode('alchemer_reviews_testimonial', array($this, 'display_reviews_testimonial'));
+        add_shortcode('amrr_list', array($this, 'display_reviews_list'));
+        add_shortcode('amrr_grid', array($this, 'display_reviews_grid'));
+        add_shortcode('amrr_testimonial', array($this, 'display_reviews_testimonial'));
+        add_action('init', array($this, 'register_legacy_shortcode'), 99);
         
         // Register scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'register_scripts'));
+    }
+
+    public function register_legacy_shortcode() {
+        add_shortcode('vmb_reviews', array($this, 'display_legacy_vmb_reviews'));
     }
     
     /**
      * Register scripts and styles
      */
     public function register_scripts() {
-        wp_register_style('alchemer-reviews-style', plugins_url('assets/css/alchemer-reviews.css', __FILE__), array(), '2.1.0');
-        wp_register_script('alchemer-reviews-script', plugins_url('assets/js/alchemer-reviews.js', __FILE__), array('jquery'), '2.1.0', true);
+        wp_register_style('alchemer-multi-resort-reviews-style', plugins_url('assets/css/alchemer-multi-resort-reviews.css', __FILE__), array(), '2.1.0');
+        wp_register_script('alchemer-multi-resort-reviews-script', plugins_url('assets/js/alchemer-multi-resort-reviews.js', __FILE__), array('jquery'), '2.1.0', true);
     }
     
     /**
      * Get reviews from the database or demo data
      */
-    public function get_reviews($count = -1, $demo = false) {
+    public function get_reviews($count = -1, $demo = false, $property = '') {
         if ($demo) {
             $demo_reviews = $this->get_demo_data();
             
@@ -53,12 +58,23 @@ class Alchemer_Review_Carousel {
         }
         
         $args = array(
-            'post_type' => 'alchemer-review',
+            'post_type' => 'amrr-review',
             'posts_per_page' => $count,
             'post_status' => 'publish',
             'orderby' => 'date',
             'order' => 'DESC',
+            'meta_query' => array(
+                array(
+                    'relation' => 'OR',
+                    array( 'key' => '_amrr_hidden', 'compare' => 'NOT EXISTS' ),
+                    array( 'key' => '_amrr_hidden', 'value' => '1', 'compare' => '!=' ),
+                ),
+            ),
         );
+
+        if ( $property ) {
+            $args['meta_query'][] = array( 'key' => '_amrr_property_slug', 'value' => sanitize_title( $property ) );
+        }
         
         $reviews = get_posts($args);
         $formatted_reviews = array();
@@ -84,12 +100,13 @@ class Alchemer_Review_Carousel {
             'count' => 3,
             'title' => 'What Our Customers Say',
             'demo' => false,
+            'property' => '',
         ), $atts);
         
-        wp_enqueue_style('alchemer-reviews-style');
+        wp_enqueue_style('alchemer-multi-resort-reviews-style');
         
         $demo = filter_var($atts['demo'], FILTER_VALIDATE_BOOLEAN);
-        $reviews = $this->get_reviews($atts['count'], $demo);
+        $reviews = $this->get_reviews($atts['count'], $demo, $atts['property']);
         
         ob_start();
         include plugin_dir_path(__FILE__) . 'templates/list-layout.php';
@@ -104,13 +121,14 @@ class Alchemer_Review_Carousel {
             'count' => 3,
             'title' => 'What Our Customers Say',
             'demo' => false,
+            'property' => '',
         ), $atts);
         
-        wp_enqueue_style('alchemer-reviews-style');
-        wp_enqueue_script('alchemer-reviews-script');
+        wp_enqueue_style('alchemer-multi-resort-reviews-style');
+        wp_enqueue_script('alchemer-multi-resort-reviews-script');
         
         $demo = filter_var($atts['demo'], FILTER_VALIDATE_BOOLEAN);
-        $reviews = $this->get_reviews($atts['count'], $demo);
+        $reviews = $this->get_reviews($atts['count'], $demo, $atts['property']);
         
         ob_start();
         include plugin_dir_path(__FILE__) . 'templates/grid-layout.php';
@@ -127,15 +145,16 @@ class Alchemer_Review_Carousel {
             'demo' => false,
             'center_mode' => false,
             'slides_to_show' => 3,
+            'property' => '',
         ), $atts);
         
-        wp_enqueue_style('alchemer-reviews-style');
-        wp_enqueue_script('alchemer-reviews-script');
+        wp_enqueue_style('alchemer-multi-resort-reviews-style');
+        wp_enqueue_script('alchemer-multi-resort-reviews-script');
         
         $demo = filter_var($atts['demo'], FILTER_VALIDATE_BOOLEAN);
         $center_mode = filter_var($atts['center_mode'], FILTER_VALIDATE_BOOLEAN);
         
-        $reviews = $this->get_reviews($atts['count'], $demo);
+        $reviews = $this->get_reviews($atts['count'], $demo, $atts['property']);
 
         if (empty($reviews)) {
             return '';
@@ -185,6 +204,23 @@ class Alchemer_Review_Carousel {
         }
         
         return $stars;
+    }
+
+    /** Backward-compatible VMB shortcode using the new review store. */
+    public function display_legacy_vmb_reviews( $atts ) {
+        $atts = shortcode_atts( array( 'resort_id' => '', 'limit' => -1 ), $atts, 'vmb_reviews' );
+        $property = '';
+        if ( $atts['resort_id'] ) {
+            $property = sanitize_title( get_the_title( intval( $atts['resort_id'] ) ) );
+        } elseif ( is_singular( 'resort' ) ) {
+            $property = sanitize_title( get_the_title() );
+        }
+        return $this->display_reviews_testimonial( array(
+            'count' => intval( $atts['limit'] ),
+            'property' => $property,
+            'title' => '',
+            'slides_to_show' => 2,
+        ) );
     }
     
     /**
@@ -247,4 +283,4 @@ class Alchemer_Review_Carousel {
 }
 
 // Initialize the plugin
-$alchemer_reviews = new Alchemer_Review_Carousel();
+$amrr_reviews = new AMRR_Review_Carousel();

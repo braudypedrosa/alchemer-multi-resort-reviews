@@ -1,5 +1,5 @@
 /* Common Styles */
-.alchemer-reviews {
+.alchemer-multi-resort-reviews {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
@@ -7,7 +7,7 @@
     sans-serif;
 }
 
-.alchemer-reviews-title {
+.alchemer-multi-resort-reviews-title {
   text-align: center;
   font-size: 28px;
   font-weight: 700;
@@ -46,12 +46,12 @@
 }
 
 /* List Layout Styles */
-.alchemer-reviews-list .alchemer-list-container {
+.alchemer-multi-resort-reviews-list .alchemer-list-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.alchemer-reviews-list .alchemer-review-item {
+.alchemer-multi-resort-reviews-list .amrr-review-item {
   border: 1px solid #f0f0f0;
   border-radius: 8px;
   padding: 20px;
@@ -60,40 +60,40 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.alchemer-reviews-list .alchemer-review-header {
+.alchemer-multi-resort-reviews-list .amrr-review-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 15px;
 }
 
-.alchemer-reviews-list .alchemer-reviewer-info {
+.alchemer-multi-resort-reviews-list .amrr-reviewer-info {
   display: flex;
   align-items: center;
 }
 
-.alchemer-reviews-list .alchemer-reviewer-name {
+.alchemer-multi-resort-reviews-list .amrr-reviewer-name {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 5px;
 }
 
-.alchemer-reviews-list .alchemer-review-date {
+.alchemer-multi-resort-reviews-list .amrr-review-date {
   font-size: 14px;
   color: #666;
 }
 
-.alchemer-reviews-list .alchemer-review-content {
+.alchemer-multi-resort-reviews-list .amrr-review-content {
   font-size: 15px;
   line-height: 1.6;
   color: #333;
 }
 
-.alchemer-reviews-list .alchemer-review-content p {
+.alchemer-multi-resort-reviews-list .amrr-review-content p {
   margin-bottom: 0!important;
 }
 
-.alchemer-reviews-list .alchemer-list-item {
+.alchemer-multi-resort-reviews-list .alchemer-list-item {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -105,11 +105,11 @@
 }
 
 /* Grid Layout */
-.alchemer-reviews-grid {
+.alchemer-multi-resort-reviews-grid {
     padding: 2rem 0;
 }
 
-.alchemer-reviews-title {
+.alchemer-multi-resort-reviews-title {
     font-size: 2rem;
     font-weight: 600;
     text-align: center;
@@ -140,31 +140,31 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.alchemer-reviewer-info {
+.amrr-reviewer-info {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.alchemer-reviewer-meta {
+.amrr-reviewer-meta {
     flex: 1;
     text-align: center;
 }
 
-.alchemer-reviewer-name {
+.amrr-reviewer-name {
     font-size: 1.1rem;
     font-weight: 600;
     color: #2d3748;
     margin: 0;
 }
 
-.alchemer-review-date {
+.amrr-review-date {
     font-size: 0.9rem;
     color: #718096;
     margin-top: 0.25rem;
 }
 
-.alchemer-review-rating {
+.amrr-review-rating {
     color: #f6ad55;
     font-size: 1.2rem;
     display: flex;
@@ -172,7 +172,7 @@
     justify-content: center;
 }
 
-.alchemer-review-content {
+.amrr-review-content {
     color: #4a5568;
     line-height: 1.6;
     font-size: 1rem;
@@ -187,7 +187,7 @@
         padding: 1rem 0.5rem;
     }
 
-    .alchemer-reviews-title {
+    .alchemer-multi-resort-reviews-title {
         font-size: 1.75rem;
         margin-bottom: 1.5rem;
     }
@@ -205,7 +205,7 @@
 }
 
 /* Testimonial Layout Styles */
-.alchemer-reviews-testimonial {
+.alchemer-multi-resort-reviews-testimonial {
   text-align: center;
   margin-bottom: 40px;
   position: relative;
@@ -246,23 +246,23 @@
 }
 
 /* Center mode styles */
-.alchemer-reviews-testimonial.center-mode .alchemer-testimonial-slide {
+.alchemer-multi-resort-reviews-testimonial.center-mode .alchemer-testimonial-slide {
   opacity: 0.8;
   transform: scale(0.95);
   filter: blur(0.5px);
   transition: all 0.3s ease;
 }
 
-.alchemer-reviews-testimonial.center-mode .alchemer-testimonial-slide.active,
-.alchemer-reviews-testimonial.center-mode .alchemer-testimonial-slide.center {
+.alchemer-multi-resort-reviews-testimonial.center-mode .alchemer-testimonial-slide.active,
+.alchemer-multi-resort-reviews-testimonial.center-mode .alchemer-testimonial-slide.center {
   opacity: 1;
   transform: scale(1.05);
   filter: blur(0);
   z-index: 2;
 }
 
-.alchemer-reviews-testimonial.center-mode .alchemer-testimonial-slide.active .alchemer-testimonial-slide-inner,
-.alchemer-reviews-testimonial.center-mode .alchemer-testimonial-slide.center .alchemer-testimonial-slide-inner {
+.alchemer-multi-resort-reviews-testimonial.center-mode .alchemer-testimonial-slide.active .alchemer-testimonial-slide-inner,
+.alchemer-multi-resort-reviews-testimonial.center-mode .alchemer-testimonial-slide.center .alchemer-testimonial-slide-inner {
   box-shadow: 0 8px 16px rgba(0, 123, 255, 0.2);
   background-color: #ffffff;
 }
@@ -280,7 +280,7 @@
   }
 }
 
-.alchemer-reviews-testimonial.center-mode .alchemer-testimonial-slide.active .alchemer-testimonial-slide-inner {
+.alchemer-multi-resort-reviews-testimonial.center-mode .alchemer-testimonial-slide.active .alchemer-testimonial-slide-inner {
   animation: subtle-glow 3s infinite;
 }
 

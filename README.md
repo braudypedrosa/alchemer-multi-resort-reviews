@@ -1,12 +1,26 @@
-# Alchemer Reviews
+# Alchemer Multi-Resort Reviews
 
-A WordPress plugin to fetch Alchemer survey responses and manage them as reviews in your WordPress dashboard.
+A standalone WordPress plugin to fetch Alchemer survey responses for multiple resorts or properties, moderate them, and display property-filtered reviews. It is an independent fork of `braudypedrosa/alchemer-reviews` and can coexist with the original plugin.
 
 ## Description
 
 Alchemer Reviews creates a bridge between your Alchemer (formerly SurveyGizmo) surveys and WordPress. The plugin fetches survey responses and stores them as review posts in WordPress. It's perfect for businesses looking to collect and manage customer feedback from Alchemer surveys.
 
-## Features
+## Multi-resort features
+
+- Independent `amrr-review` post type, hooks, options, cron job, PHP classes, shortcodes, updater, and release ZIP
+- Shared Alchemer API credentials with per-resort survey IDs and field mappings
+- Enable/disable and daily-sync controls per resort
+- Bulk sync for every enabled resort and manual sync for one resort
+- Property-scoped duplicate IDs in `property-slug-response-id` format
+- Conservative daily sync that stops at the first existing response and saves new reviews as drafts
+- Property column and filter in the Reviews admin screen
+- Property-filtered list, grid, and testimonial shortcodes using the `property` attribute
+- Backward-compatible `[vmb_reviews resort_id="..."]` shortcode
+- Idempotent VMB migration tool that copies legacy `vmb_reviews` posts and preserves the originals
+- Migration of ratings, reviewer names, property links, visibility, manual-edit protection, and legacy IDs
+
+## Inherited features
 
 - Custom 'Reviews' post type for managing review content
 - Seamless integration with the Alchemer API
@@ -21,11 +35,11 @@ Alchemer Reviews creates a bridge between your Alchemer (formerly SurveyGizmo) s
 
 ## Installation
 
-1. Upload the `alchemer-reviews` folder to the `/wp-content/plugins/` directory
+1. Upload the `alchemer-multi-resort-reviews` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Configure your Alchemer API credentials in the 'Reviews > Settings' page
-4. Map your survey questions to review fields in the 'Reviews > Field Mapping' page
-5. Import your reviews manually or set up automatic daily imports
+3. Configure shared Alchemer API credentials in Reviews > Settings
+4. Add each property in Reviews > Resorts with its survey ID, rating question, and reviewer-name field
+5. Use VMB Migration when replacing the legacy VMB reviews implementation
 
 ## API Configuration
 
@@ -86,4 +100,4 @@ This feature is particularly useful when you want to fix typos, improve formatti
 
 ## Credits
 
-Developed by [Your Name/Company] 
+Developed by Braudy Pedrosa / Buildup Bookings.

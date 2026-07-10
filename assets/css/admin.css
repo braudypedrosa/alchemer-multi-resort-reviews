@@ -172,26 +172,26 @@ input:checked + .alchemer-toggle-slider:before {
     overflow: visible;
 }
 
-.alchemer-review-details-fields {
+.amrr-review-details-fields {
     display: grid;
     gap: 12px;
 }
 
-.alchemer-review-field {
+.amrr-review-field {
     display: block;
     min-width: 0;
 }
 
-.alchemer-review-field label,
-.alchemer-review-field-label {
+.amrr-review-field label,
+.amrr-review-field-label {
     display: block;
     margin: 0 0 4px;
     font-weight: 600;
     line-height: 1.35;
 }
 
-.alchemer-review-field input[type="text"],
-.alchemer-review-field select {
+.amrr-review-field input[type="text"],
+.amrr-review-field select {
     display: block;
     width: 100%;
     max-width: 100%;
@@ -216,18 +216,18 @@ input:checked + .alchemer-toggle-slider:before {
     white-space: nowrap;
 }
 
-.alchemer-review-inline-meta span:last-child {
+.amrr-review-inline-meta span:last-child {
     overflow-wrap: anywhere;
 }
 
-.alchemer-review-checkbox-label {
+.amrr-review-checkbox-label {
     display: flex !important;
     align-items: flex-start;
     gap: 6px;
     font-weight: 400 !important;
 }
 
-.alchemer-review-checkbox-label input {
+.amrr-review-checkbox-label input {
     flex: 0 0 auto;
     margin-top: 2px;
 }

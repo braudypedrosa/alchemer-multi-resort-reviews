@@ -4,21 +4,21 @@
  *
  * @since 1.0.0
  */
-class Alchemer_Reviews_Settings {
+class AMRR_Settings {
 
     /**
      * The option group name
      *
      * @var string
      */
-    private $option_group = 'alchemer_reviews_options';
+    private $option_group = 'amrr_options';
 
     /**
      * The option name in the database
      *
      * @var string
      */
-    private $option_name = 'alchemer_reviews_settings';
+    private $option_name = 'amrr_settings';
 
     /**
      * Initialize the class and set its hooks.
@@ -50,11 +50,11 @@ class Alchemer_Reviews_Settings {
      */
     public function add_settings_page() {
         add_submenu_page(
-            'edit.php?post_type=alchemer-review',
-            __( 'Alchemer Settings', 'alchemer-reviews' ),
-            __( 'Settings', 'alchemer-reviews' ),
+            'edit.php?post_type=amrr-review',
+            __( 'Alchemer Settings', 'alchemer-multi-resort-reviews' ),
+            __( 'Settings', 'alchemer-multi-resort-reviews' ),
             'manage_options',
-            'alchemer_reviews_settings',
+            'amrr_settings',
             array( $this, 'render_settings_page' )
         );
     }
@@ -75,41 +75,41 @@ class Alchemer_Reviews_Settings {
         // Add settings section
         add_settings_section(
             'alchemer_api_settings',
-            __( 'Alchemer API Settings', 'alchemer-reviews' ),
+            __( 'Alchemer API Settings', 'alchemer-multi-resort-reviews' ),
             array( $this, 'render_api_section' ),
-            'alchemer_reviews_settings'
+            'amrr_settings'
         );
 
         // Add settings fields
         add_settings_field(
             'api_token',
-            __( 'API Token', 'alchemer-reviews' ),
+            __( 'API Token', 'alchemer-multi-resort-reviews' ),
             array( $this, 'render_api_token_field' ),
-            'alchemer_reviews_settings',
+            'amrr_settings',
             'alchemer_api_settings'
         );
 
         add_settings_field(
             'api_token_secret',
-            __( 'API Token Secret', 'alchemer-reviews' ),
+            __( 'API Token Secret', 'alchemer-multi-resort-reviews' ),
             array( $this, 'render_api_token_secret_field' ),
-            'alchemer_reviews_settings',
+            'amrr_settings',
             'alchemer_api_settings'
         );
 
         add_settings_field(
             'survey_id',
-            __( 'Survey ID', 'alchemer-reviews' ),
+            __( 'Survey ID', 'alchemer-multi-resort-reviews' ),
             array( $this, 'render_survey_id_field' ),
-            'alchemer_reviews_settings',
+            'amrr_settings',
             'alchemer_api_settings'
         );
         
         add_settings_field(
             'test_connection',
-            __( 'Test Connection', 'alchemer-reviews' ),
+            __( 'Test Connection', 'alchemer-multi-resort-reviews' ),
             array( $this, 'render_test_connection_field' ),
-            'alchemer_reviews_settings',
+            'amrr_settings',
             'alchemer_api_settings'
         );
     }
@@ -138,7 +138,7 @@ class Alchemer_Reviews_Settings {
         }
         
         // Set transient for admin notice
-        set_transient( 'alchemer_reviews_settings_updated', true, 5 );
+        set_transient( 'amrr_settings_updated', true, 5 );
         
         return $sanitized_input;
     }
@@ -151,23 +151,23 @@ class Alchemer_Reviews_Settings {
     public function display_admin_notices() {
         // Check if we're on the settings page
         $screen = get_current_screen();
-        if ( $screen->id !== 'alchemer-review_page_alchemer_reviews_settings' ) {
+        if ( $screen->id !== 'amrr-review_page_amrr_settings' ) {
             return;
         }
         
         // Check if settings were just updated
-        if ( get_transient( 'alchemer_reviews_settings_updated' ) ) {
+        if ( get_transient( 'amrr_settings_updated' ) ) {
             ?>
             <div class="alchemer-admin-area mb-4">
                 <div class="alert alert-success">
                     <div class="flex items-center">
                         <span class="dashicons dashicons-yes-alt mr-2"></span>
-                        <p><?php _e( 'Alchemer API settings have been saved successfully.', 'alchemer-reviews' ); ?></p>
+                        <p><?php _e( 'Alchemer API settings have been saved successfully.', 'alchemer-multi-resort-reviews' ); ?></p>
                     </div>
                 </div>
             </div>
             <?php
-            delete_transient( 'alchemer_reviews_settings_updated' );
+            delete_transient( 'amrr_settings_updated' );
         }
         
         // Check if API credentials are set
@@ -182,7 +182,7 @@ class Alchemer_Reviews_Settings {
                 <div class="alert alert-warning">
                     <div class="flex items-center">
                         <span class="dashicons dashicons-warning mr-2"></span>
-                        <p><?php _e( 'Please complete your Alchemer API settings. All fields are required to connect to the Alchemer API.', 'alchemer-reviews' ); ?></p>
+                        <p><?php _e( 'Please complete your Alchemer API settings. All fields are required to connect to the Alchemer API.', 'alchemer-multi-resort-reviews' ); ?></p>
                     </div>
                 </div>
             </div>
@@ -196,7 +196,7 @@ class Alchemer_Reviews_Settings {
      * @return void
      */
     public function render_api_section() {
-        echo '<p>' . __( 'Enter your Alchemer API credentials to connect to your surveys.', 'alchemer-reviews' ) . '</p>';
+        echo '<p>' . __( 'Enter your Alchemer API credentials to connect to your surveys.', 'alchemer-multi-resort-reviews' ) . '</p>';
     }
 
     /**
@@ -209,7 +209,7 @@ class Alchemer_Reviews_Settings {
         $value = isset( $options['api_token'] ) ? $options['api_token'] : '';
         
         echo '<input type="text" id="api_token" name="' . esc_attr( $this->option_name ) . '[api_token]" value="' . esc_attr( $value ) . '" class="regular-text">';
-        echo '<p class="description">' . __( 'Enter your Alchemer API Token (e.g., 3577a1b61ad7ef19043038e6c3ae21d085dbc0d72a33c0b2ca). Do not include any spaces.', 'alchemer-reviews' ) . '</p>';
+        echo '<p class="description">' . __( 'Enter your Alchemer API Token (e.g., 3577a1b61ad7ef19043038e6c3ae21d085dbc0d72a33c0b2ca). Do not include any spaces.', 'alchemer-multi-resort-reviews' ) . '</p>';
     }
 
     /**
@@ -222,8 +222,8 @@ class Alchemer_Reviews_Settings {
         $value = isset( $options['api_token_secret'] ) ? $options['api_token_secret'] : '';
         
         echo '<input type="text" id="api_token_secret" name="' . esc_attr( $this->option_name ) . '[api_token_secret]" value="' . esc_attr( $value ) . '" class="regular-text">';
-        echo '<p class="description">' . __( 'Enter your Alchemer API Token Secret (e.g., A9J%2FCA2zvJRcQ). Make sure to copy it exactly as shown in your Alchemer account, including any URL-encoded characters like %2F.', 'alchemer-reviews' ) . '</p>';
-        echo '<p class="description" style="color: #d63638;"><strong>' . __( 'Important: Do not modify special characters like %2F in the token. These are part of the API key and must be preserved exactly as shown in your Alchemer account.', 'alchemer-reviews' ) . '</strong></p>';
+        echo '<p class="description">' . __( 'Enter your Alchemer API Token Secret (e.g., A9J%2FCA2zvJRcQ). Make sure to copy it exactly as shown in your Alchemer account, including any URL-encoded characters like %2F.', 'alchemer-multi-resort-reviews' ) . '</p>';
+        echo '<p class="description" style="color: #d63638;"><strong>' . __( 'Important: Do not modify special characters like %2F in the token. These are part of the API key and must be preserved exactly as shown in your Alchemer account.', 'alchemer-multi-resort-reviews' ) . '</strong></p>';
     }
 
     /**
@@ -236,7 +236,7 @@ class Alchemer_Reviews_Settings {
         $value = isset( $options['survey_id'] ) ? $options['survey_id'] : '';
         
         echo '<input type="text" id="survey_id" name="' . esc_attr( $this->option_name ) . '[survey_id]" value="' . esc_attr( $value ) . '" class="regular-text">';
-        echo '<p class="description">' . __( 'Enter the Alchemer Survey ID to pull reviews from.', 'alchemer-reviews' ) . '</p>';
+        echo '<p class="description">' . __( 'Enter the Alchemer Survey ID to pull reviews from.', 'alchemer-multi-resort-reviews' ) . '</p>';
     }
     
     /**
@@ -245,10 +245,10 @@ class Alchemer_Reviews_Settings {
      * @return void
      */
     public function render_test_connection_field() {
-        echo '<button type="button" id="test-alchemer-connection" class="button">' . __( 'Test API Connection', 'alchemer-reviews' ) . '</button>';
+        echo '<button type="button" id="test-alchemer-connection" class="button">' . __( 'Test API Connection', 'alchemer-multi-resort-reviews' ) . '</button>';
         echo '<span class="spinner" id="connection-spinner" style="float: none; margin-top: 0;"></span>';
         echo '<div id="test-connection-result" style="margin-top: 10px;"></div>';
-        echo '<p class="description">' . __( 'Sample API call format: https://api.alchemer.com/v5/survey/YOUR_SURVEY_ID/surveyresponse?api_token=YOUR_TOKEN&api_token_secret=YOUR_SECRET', 'alchemer-reviews' ) . '</p>';
+        echo '<p class="description">' . __( 'Sample API call format: https://api.alchemer.com/v5/survey/YOUR_SURVEY_ID/surveyresponse?api_token=YOUR_TOKEN&api_token_secret=YOUR_SECRET', 'alchemer-multi-resort-reviews' ) . '</p>';
     }
 
     /**
@@ -268,46 +268,46 @@ class Alchemer_Reviews_Settings {
                 <div class="alchemer-tab-content alchemer-tab-active" id="alchemer-tab">
                     <!-- Alchemer API Settings and Test Button (existing content) -->
                     <div class="dashboard-card w-full fade-in">
-                        <h2 class="text-xl font-medium text-gray-800 mb-4"><?php _e('Alchemer API Settings', 'alchemer-reviews'); ?></h2>
-                        <p class="text-gray-600 mb-6"><?php _e('Enter your Alchemer API credentials to connect to your surveys.', 'alchemer-reviews'); ?></p>
+                        <h2 class="text-xl font-medium text-gray-800 mb-4"><?php _e('Alchemer API Settings', 'alchemer-multi-resort-reviews'); ?></h2>
+                        <p class="text-gray-600 mb-6"><?php _e('Enter your Alchemer API credentials to connect to your surveys.', 'alchemer-multi-resort-reviews'); ?></p>
                         <form action="options.php" method="post" class="w-full">
                             <?php settings_fields( $this->option_group ); ?>
                             <div class="form-input-container w-full">
-                                <label for="api_token" class="form-label"><?php _e('API Token', 'alchemer-reviews'); ?></label>
+                                <label for="api_token" class="form-label"><?php _e('API Token', 'alchemer-multi-resort-reviews'); ?></label>
                                 <input type="text" id="api_token" name="<?php echo esc_attr($this->option_name); ?>[api_token]" value="<?php echo esc_attr(isset($this->get_settings()['api_token']) ? $this->get_settings()['api_token'] : ''); ?>" class="form-input">
-                                <div class="form-help-text"><?php _e('Enter your Alchemer API Token (e.g., 3577a1b61ad7ef19043038e6c3ae21d085dbc0d72a33c0b2ca). Do not include any spaces.', 'alchemer-reviews'); ?></div>
+                                <div class="form-help-text"><?php _e('Enter your Alchemer API Token (e.g., 3577a1b61ad7ef19043038e6c3ae21d085dbc0d72a33c0b2ca). Do not include any spaces.', 'alchemer-multi-resort-reviews'); ?></div>
                             </div>
                             <div class="form-input-container w-full">
-                                <label for="api_token_secret" class="form-label"><?php _e('API Token Secret', 'alchemer-reviews'); ?></label>
+                                <label for="api_token_secret" class="form-label"><?php _e('API Token Secret', 'alchemer-multi-resort-reviews'); ?></label>
                                 <input type="text" id="api_token_secret" name="<?php echo esc_attr($this->option_name); ?>[api_token_secret]" value="<?php echo esc_attr(isset($this->get_settings()['api_token_secret']) ? $this->get_settings()['api_token_secret'] : ''); ?>" class="form-input">
-                                <div class="form-help-text"><?php _e('Enter your Alchemer API Token Secret (e.g., A9J%2FCA2zvJRcQ). Make sure to copy it exactly as shown in your Alchemer account, including any URL-encoded characters like %2F.', 'alchemer-reviews'); ?></div>
-                                <div class="form-help-text text-red-600 font-medium mt-1"><?php _e('Important: Do not modify special characters like %2F in the token. These are part of the API key and must be preserved exactly as shown in your Alchemer account.', 'alchemer-reviews'); ?></div>
+                                <div class="form-help-text"><?php _e('Enter your Alchemer API Token Secret (e.g., A9J%2FCA2zvJRcQ). Make sure to copy it exactly as shown in your Alchemer account, including any URL-encoded characters like %2F.', 'alchemer-multi-resort-reviews'); ?></div>
+                                <div class="form-help-text text-red-600 font-medium mt-1"><?php _e('Important: Do not modify special characters like %2F in the token. These are part of the API key and must be preserved exactly as shown in your Alchemer account.', 'alchemer-multi-resort-reviews'); ?></div>
                             </div>
                             <div class="form-input-container w-full">
-                                <label for="survey_id" class="form-label"><?php _e('Survey ID', 'alchemer-reviews'); ?></label>
+                                <label for="survey_id" class="form-label"><?php _e('Survey ID', 'alchemer-multi-resort-reviews'); ?></label>
                                 <input type="text" id="survey_id" name="<?php echo esc_attr($this->option_name); ?>[survey_id]" value="<?php echo esc_attr(isset($this->get_settings()['survey_id']) ? $this->get_settings()['survey_id'] : ''); ?>" class="form-input">
-                                <div class="form-help-text"><?php _e('Enter the Alchemer Survey ID to pull reviews from.', 'alchemer-reviews'); ?></div>
+                                <div class="form-help-text"><?php _e('Enter the Alchemer Survey ID to pull reviews from.', 'alchemer-multi-resort-reviews'); ?></div>
                             </div>
                             <div class="mt-6">
-                                <button type="submit" class="alchemer-button alchemer-button-primary"><?php _e('Save Settings', 'alchemer-reviews'); ?></button>
+                                <button type="submit" class="alchemer-button alchemer-button-primary"><?php _e('Save Settings', 'alchemer-multi-resort-reviews'); ?></button>
                             </div>
                         </form>
                     </div>
                     <div class="dashboard-card w-full mt-6 fade-in">
-                        <h2 class="text-xl font-medium text-gray-800 mb-4"><?php _e('Test API Connection', 'alchemer-reviews'); ?></h2>
-                        <p class="text-gray-600 mb-4"><?php _e('Verify your API credentials by testing the connection to Alchemer.', 'alchemer-reviews'); ?></p>
+                        <h2 class="text-xl font-medium text-gray-800 mb-4"><?php _e('Test API Connection', 'alchemer-multi-resort-reviews'); ?></h2>
+                        <p class="text-gray-600 mb-4"><?php _e('Verify your API credentials by testing the connection to Alchemer.', 'alchemer-multi-resort-reviews'); ?></p>
                         <div class="bg-gray-50 p-4 rounded-lg mb-4">
                             <div class="flex items-center">
                                 <button type="button" id="test-alchemer-connection" class="alchemer-button alchemer-button-secondary">
                                     <span class="dashicons dashicons-database-view mr-1"></span>
-                                    <?php _e('Test API Connection', 'alchemer-reviews'); ?>
+                                    <?php _e('Test API Connection', 'alchemer-multi-resort-reviews'); ?>
                                 </button>
                                 <div class="spinner ml-3 hidden" id="connection-spinner"></div>
                             </div>
                             <div id="test-connection-result" class="mt-3"></div>
                         </div>
                         <div class="text-sm text-gray-500">
-                            <?php _e('Sample API call format:', 'alchemer-reviews'); ?>
+                            <?php _e('Sample API call format:', 'alchemer-multi-resort-reviews'); ?>
                             <code class="bg-gray-100 px-2 py-1 rounded text-sm block mt-1 overflow-x-auto whitespace-nowrap">
                                 https://api.alchemer.com/v5/survey/YOUR_SURVEY_ID/surveyresponse?api_token=YOUR_TOKEN&api_token_secret=YOUR_SECRET
                             </code>
@@ -315,7 +315,7 @@ class Alchemer_Reviews_Settings {
                     </div>
                 </div>
 
-                <?php do_action( 'alchemer_reviews_after_settings' ); ?>
+                <?php do_action( 'amrr_after_settings' ); ?>
             </div>
         </div>
         <?php
@@ -329,27 +329,27 @@ class Alchemer_Reviews_Settings {
      */
     public function enqueue_admin_scripts( $hook ) {
         // Only enqueue script on plugin settings page
-        if ( $hook !== 'alchemer-review_page_alchemer_reviews_settings' ) {
+        if ( $hook !== 'amrr-review_page_amrr_settings' ) {
             return;
         }
         
         // Enqueue admin JS
         wp_enqueue_script(
-            'alchemer-reviews-admin',
-            ALCHEMER_REVIEWS_PLUGIN_URL . 'assets/js/admin.js',
+            'alchemer-multi-resort-reviews-admin',
+            AMRR_PLUGIN_URL . 'assets/js/admin.js',
             array( 'jquery' ),
-            ALCHEMER_REVIEWS_VERSION,
+            AMRR_VERSION,
             true
         );
         
         wp_localize_script(
-            'alchemer-reviews-admin',
+            'alchemer-multi-resort-reviews-admin',
             'alchemerReviewsAdmin',
             array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
                 'nonce' => wp_create_nonce( 'test_alchemer_api_connection' ),
-                'testingText' => __( 'Testing connection...', 'alchemer-reviews' ),
-                'errorText' => __( 'Error: ', 'alchemer-reviews' ),
+                'testingText' => __( 'Testing connection...', 'alchemer-multi-resort-reviews' ),
+                'errorText' => __( 'Error: ', 'alchemer-multi-resort-reviews' ),
                 'successClass' => 'alert alert-success',
                 'errorClass' => 'alert alert-error',
             )
@@ -368,15 +368,15 @@ class Alchemer_Reviews_Settings {
         // Check user capability
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_send_json_error( array(
-                'message' => __( 'You do not have permission to perform this action.', 'alchemer-reviews' ),
+                'message' => __( 'You do not have permission to perform this action.', 'alchemer-multi-resort-reviews' ),
             ) );
         }
         
         // Load API class
-        require_once ALCHEMER_REVIEWS_PLUGIN_DIR . 'includes/class-alchemer-reviews-api.php';
+        require_once AMRR_PLUGIN_DIR . 'includes/class-amrr-reviews-api.php';
         
         // Create API instance
-        $api = new Alchemer_Reviews_API();
+        $api = new AMRR_API();
         
         // Test connection
         $result = $api->test_connection();
@@ -411,7 +411,7 @@ class Alchemer_Reviews_Settings {
      */
     public function enqueue_admin_styles($hook) {
         // Only load Tailwind on the plugin settings page
-        if ( $hook !== 'alchemer-review_page_alchemer_reviews_settings' ) {
+        if ( $hook !== 'amrr-review_page_amrr_settings' ) {
             return;
         }
         
@@ -432,9 +432,9 @@ class Alchemer_Reviews_Settings {
         // Register and enqueue custom Tailwind admin CSS
         wp_register_style(
             'alchemer-tailwind-admin',
-            ALCHEMER_REVIEWS_PLUGIN_URL . 'assets/css/admin-tailwind.css',
+            AMRR_PLUGIN_URL . 'assets/css/admin-tailwind.css',
             array('tailwind-alchemer'),
-            ALCHEMER_REVIEWS_VERSION
+            AMRR_VERSION
         );
         
         wp_enqueue_style('alchemer-tailwind-admin');
@@ -442,9 +442,9 @@ class Alchemer_Reviews_Settings {
         // Register and enqueue override CSS with highest specificity
         wp_register_style(
             'alchemer-tailwind-override',
-            ALCHEMER_REVIEWS_PLUGIN_URL . 'assets/css/admin-tailwind-override.css',
+            AMRR_PLUGIN_URL . 'assets/css/admin-tailwind-override.css',
             array('tailwind-alchemer', 'alchemer-tailwind-admin'),
-            ALCHEMER_REVIEWS_VERSION . '.' . time() // Add timestamp to prevent caching
+            AMRR_VERSION . '.' . time() // Add timestamp to prevent caching
         );
         
         wp_enqueue_style('alchemer-tailwind-override');

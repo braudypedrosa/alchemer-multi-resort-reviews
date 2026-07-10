@@ -1,7 +1,7 @@
 {
-  "name": "alchemer-reviews",
-  "version": "1.0.18",
-  "description": "A plugin to import and manage Alchemer survey responses as reviews in WordPress",
+  "name": "alchemer-multi-resort-reviews",
+  "version": "1.0.0",
+  "description": "A multi-resort WordPress plugin for importing and managing Alchemer reviews",
   "main": "gulpfile.js",
   "scripts": {
     "build": "gulp build",

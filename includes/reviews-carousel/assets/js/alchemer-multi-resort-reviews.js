@@ -11,7 +11,7 @@
     var sliderId = $slider.data("slider-id")
     var centerMode = $slider.data("center-mode") === "true"
     var slidesToShow = Number.parseInt($slider.data("slides-to-show") || 3, 10)
-    var $container = $slider.closest(".alchemer-reviews-testimonial")
+    var $container = $slider.closest(".alchemer-multi-resort-reviews-testimonial")
 
     // Get slider elements
     var $track = $slider.find(".alchemer-testimonial-track")

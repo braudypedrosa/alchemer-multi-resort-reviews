@@ -4,7 +4,7 @@
  *
  * @since 1.0.0
  */
-class Alchemer_Reviews_API {
+class AMRR_API {
 
     /**
      * API base URL
@@ -34,6 +34,8 @@ class Alchemer_Reviews_API {
      */
     private $survey_id;
 
+    private $field_mappings = array();
+
     /**
      * Constructor
      * 
@@ -41,10 +43,11 @@ class Alchemer_Reviews_API {
      * @param string $api_token_secret API token secret
      * @param string $survey_id Survey ID
      */
-    public function __construct( $api_token = '', $api_token_secret = '', $survey_id = '' ) {
+    public function __construct( $api_token = '', $api_token_secret = '', $survey_id = '', $field_mappings = array() ) {
         $this->api_token = $api_token;
         $this->api_token_secret = $api_token_secret;
         $this->survey_id = $survey_id;
+        $this->field_mappings = (array) $field_mappings;
 
         // If no credentials provided, try to get them from settings
         if ( empty( $this->api_token ) || empty( $this->api_token_secret ) || empty( $this->survey_id ) ) {
@@ -58,7 +61,7 @@ class Alchemer_Reviews_API {
      * @return void
      */
     private function load_credentials_from_settings() {
-        $settings = get_option( 'alchemer_reviews_settings', array() );
+        $settings = get_option( 'amrr_settings', array() );
         
         if ( isset( $settings['api_token'] ) ) {
             $this->api_token = $settings['api_token'];
@@ -114,7 +117,7 @@ class Alchemer_Reviews_API {
         if ( empty( $this->api_token ) || empty( $this->api_token_secret ) ) {
             return array(
                 'success' => false,
-                'message' => __( 'API credentials are not configured. Please enter your API Token and API Token Secret.', 'alchemer-reviews' ),
+                'message' => __( 'API credentials are not configured. Please enter your API Token and API Token Secret.', 'alchemer-multi-resort-reviews' ),
             );
         }
         
@@ -157,16 +160,16 @@ class Alchemer_Reviews_API {
         
         // Check response code
         if ( $response_code !== 200 ) {
-            $error_message = isset( $data['message'] ) ? $data['message'] : __( 'Unknown error', 'alchemer-reviews' );
+            $error_message = isset( $data['message'] ) ? $data['message'] : __( 'Unknown error', 'alchemer-multi-resort-reviews' );
             
             // Provide more context for 401 errors
             if ( $response_code === 401 ) {
-                $error_message = __( 'Authentication failed. Please verify your API Token and API Token Secret are correct and have not been regenerated.', 'alchemer-reviews' );
+                $error_message = __( 'Authentication failed. Please verify your API Token and API Token Secret are correct and have not been regenerated.', 'alchemer-multi-resort-reviews' );
             }
             
             return array(
                 'success' => false,
-                'message' => sprintf( __( 'API error (code %d): %s', 'alchemer-reviews' ), $response_code, $error_message ),
+                'message' => sprintf( __( 'API error (code %d): %s', 'alchemer-multi-resort-reviews' ), $response_code, $error_message ),
             );
         }
         
@@ -174,7 +177,7 @@ class Alchemer_Reviews_API {
         if (empty($this->survey_id)) {
             return array(
                 'success' => true,
-                'message' => __( 'API connection successful! Please enter a Survey ID to complete the setup.', 'alchemer-reviews' ),
+                'message' => __( 'API connection successful! Please enter a Survey ID to complete the setup.', 'alchemer-multi-resort-reviews' ),
                 'account_info' => isset($data['data']) ? $data['data'] : array(),
             );
         }
@@ -209,7 +212,7 @@ class Alchemer_Reviews_API {
         if ( is_wp_error( $response ) ) {
             return array(
                 'success' => false,
-                'message' => sprintf( __( 'API connection successful, but survey access failed: %s', 'alchemer-reviews' ), $response->get_error_message() ),
+                'message' => sprintf( __( 'API connection successful, but survey access failed: %s', 'alchemer-multi-resort-reviews' ), $response->get_error_message() ),
             );
         }
         
@@ -235,16 +238,16 @@ class Alchemer_Reviews_API {
         if ( ! isset( $data['data'] ) || empty( $data['data'] ) ) {
             return array(
                 'success' => false,
-                'message' => __( 'API connection successful, but the survey was not found or returned no data.', 'alchemer-reviews' ),
+                'message' => __( 'API connection successful, but the survey was not found or returned no data.', 'alchemer-multi-resort-reviews' ),
             );
         }
         
         // Success! Return survey title
-        $survey_title = isset( $data['data']['title'] ) ? $data['data']['title'] : __( 'Unknown survey title', 'alchemer-reviews' );
+        $survey_title = isset( $data['data']['title'] ) ? $data['data']['title'] : __( 'Unknown survey title', 'alchemer-multi-resort-reviews' );
         
         return array(
             'success' => true,
-            'message' => sprintf( __( 'Connection successful! Account verified and Survey found: %s', 'alchemer-reviews' ), $survey_title ),
+            'message' => sprintf( __( 'Connection successful! Account verified and Survey found: %s', 'alchemer-multi-resort-reviews' ), $survey_title ),
             'survey_info' => $data['data'],
         );
     }
@@ -297,11 +300,11 @@ class Alchemer_Reviews_API {
         
         // Check response code
         if ( $response_code !== 200 ) {
-            $error_message = isset( $data['message'] ) ? $data['message'] : __( 'Unknown error', 'alchemer-reviews' );
+            $error_message = isset( $data['message'] ) ? $data['message'] : __( 'Unknown error', 'alchemer-multi-resort-reviews' );
             
             return array(
                 'success' => false,
-                'message' => sprintf( __( 'API connection successful, but survey ID %s is not accessible. Error: %s', 'alchemer-reviews' ), $this->survey_id, $error_message ),
+                'message' => sprintf( __( 'API connection successful, but survey ID %s is not accessible. Error: %s', 'alchemer-multi-resort-reviews' ), $this->survey_id, $error_message ),
             );
         }
         
@@ -311,7 +314,7 @@ class Alchemer_Reviews_API {
         // Success! We have access to the survey responses
         return array(
             'success' => true,
-            'message' => sprintf( __( 'Connection successful! Account verified and Survey responses accessible. Total responses: %d', 'alchemer-reviews' ), $total_count ),
+            'message' => sprintf( __( 'Connection successful! Account verified and Survey responses accessible. Total responses: %d', 'alchemer-multi-resort-reviews' ), $total_count ),
             'response_info' => $data,
         );
     }
@@ -326,7 +329,7 @@ class Alchemer_Reviews_API {
         if ( empty( $this->api_token ) || empty( $this->api_token_secret ) || empty( $this->survey_id ) ) {
             return array(
                 'success' => false,
-                'message' => __( 'API credentials are not configured. Please enter your API Token, API Token Secret, and Survey ID.', 'alchemer-reviews' ),
+                'message' => __( 'API credentials are not configured. Please enter your API Token, API Token Secret, and Survey ID.', 'alchemer-multi-resort-reviews' ),
                 'data' => array(),
             );
         }
@@ -361,11 +364,11 @@ class Alchemer_Reviews_API {
         
         // Check response code
         if ( $response_code !== 200 ) {
-            $error_message = isset( $data['message'] ) ? $data['message'] : __( 'Unknown error', 'alchemer-reviews' );
+            $error_message = isset( $data['message'] ) ? $data['message'] : __( 'Unknown error', 'alchemer-multi-resort-reviews' );
             
             return array(
                 'success' => false,
-                'message' => sprintf( __( 'API error (code %d): %s', 'alchemer-reviews' ), $response_code, $error_message ),
+                'message' => sprintf( __( 'API error (code %d): %s', 'alchemer-multi-resort-reviews' ), $response_code, $error_message ),
                 'data' => array(),
             );
         }
@@ -374,14 +377,14 @@ class Alchemer_Reviews_API {
         if ( ! isset( $data['data'] ) ) {
             return array(
                 'success' => false,
-                'message' => __( 'Invalid survey data received from API', 'alchemer-reviews' ),
+                'message' => __( 'Invalid survey data received from API', 'alchemer-multi-resort-reviews' ),
                 'data' => array(),
             );
         }
         
         return array(
             'success' => true,
-            'message' => __( 'Survey details retrieved successfully', 'alchemer-reviews' ),
+            'message' => __( 'Survey details retrieved successfully', 'alchemer-multi-resort-reviews' ),
             'data' => $data['data'],
         );
     }
@@ -397,7 +400,7 @@ class Alchemer_Reviews_API {
         if ( empty( $this->api_token ) || empty( $this->api_token_secret ) || empty( $this->survey_id ) ) {
             return array(
                 'success' => false,
-                'message' => __( 'API credentials are not configured. Please enter your API Token, API Token Secret, and Survey ID.', 'alchemer-reviews' ),
+                'message' => __( 'API credentials are not configured. Please enter your API Token, API Token Secret, and Survey ID.', 'alchemer-multi-resort-reviews' ),
                 'data' => array(),
             );
         }
@@ -489,11 +492,11 @@ class Alchemer_Reviews_API {
         
         // Check response code
         if ( $response_code !== 200 ) {
-            $error_message = isset( $data['message'] ) ? $data['message'] : __( 'Unknown error', 'alchemer-reviews' );
+            $error_message = isset( $data['message'] ) ? $data['message'] : __( 'Unknown error', 'alchemer-multi-resort-reviews' );
             
             return array(
                 'success' => false,
-                'message' => sprintf( __( 'API error (code %d): %s', 'alchemer-reviews' ), $response_code, $error_message ),
+                'message' => sprintf( __( 'API error (code %d): %s', 'alchemer-multi-resort-reviews' ), $response_code, $error_message ),
                 'data' => array(),
             );
         }
@@ -502,14 +505,14 @@ class Alchemer_Reviews_API {
         if ( ! isset( $data['data'] ) ) {
             return array(
                 'success' => true, // Still successful, just no responses
-                'message' => __( 'No survey responses found', 'alchemer-reviews' ),
+                'message' => __( 'No survey responses found', 'alchemer-multi-resort-reviews' ),
                 'data' => array(),
             );
         }
         
         return array(
             'success' => true,
-            'message' => sprintf( __( 'Successfully retrieved %d survey responses', 'alchemer-reviews' ), count( $data['data'] ) ),
+            'message' => sprintf( __( 'Successfully retrieved %d survey responses', 'alchemer-multi-resort-reviews' ), count( $data['data'] ) ),
             'data' => $data['data'],
             'total' => isset( $data['total_count'] ) ? $data['total_count'] : count( $data['data'] ),
             'page' => $page,
@@ -539,7 +542,9 @@ class Alchemer_Reviews_API {
         // Merge with provided arguments
         $args = wp_parse_args($args, $default_args);
         $stop_at_existing = !empty($args['stop_at_existing']);
+        $minimum_rating = isset($args['minimum_rating']) ? intval($args['minimum_rating']) : 0;
         unset($args['stop_at_existing']);
+        unset($args['minimum_rating']);
         
         $requested_max_reviews = intval($max_reviews);
         $import_all_new = $requested_max_reviews <= 0;
@@ -552,7 +557,7 @@ class Alchemer_Reviews_API {
         }
         
         // Get rating question field mapping to use for filtering
-        $field_mappings = get_option('alchemer_reviews_field_mappings', array());
+        $field_mappings = $this->field_mappings ?: get_option('amrr_field_mappings', array());
         $rating_question_id = !empty($field_mappings['rating_question']) ? $field_mappings['rating_question'] : '';
 
         $exclude_response_ids = array_filter(array_map('strval', (array) $exclude_response_ids));
@@ -625,10 +630,10 @@ class Alchemer_Reviews_API {
                 $response_id = isset($response_item['id']) ? strval($response_item['id']) : '';
 
                 // Verify rating if we're filtering by rating
-                if ($target_rating > 0 && !empty($rating_question_id)) {
+                if (($target_rating > 0 || $minimum_rating > 0) && !empty($rating_question_id)) {
                     $actual_rating = $this->extract_rating_from_response($response_item, $rating_question_id);
                     
-                    if ($actual_rating !== $target_rating) {
+                    if (($target_rating > 0 && $actual_rating !== $target_rating) || ($minimum_rating > 0 && $actual_rating < $minimum_rating)) {
                         if (defined('WP_DEBUG') && WP_DEBUG) {
                             $resp_id = isset($response_item['id']) ? $response_item['id'] : 'unknown';
                             error_log("Response {$resp_id} has rating {$actual_rating}, but we need {$target_rating}. Skipping.");
@@ -743,18 +748,18 @@ class Alchemer_Reviews_API {
         $message = '';
         if ($target_rating > 0) {
             $message = sprintf(
-                __('Found %d valid responses matching the rating criteria of %d stars', 'alchemer-reviews'), 
+                __('Found %d valid responses matching the rating criteria of %d stars', 'alchemer-multi-resort-reviews'), 
                 $valid_count, 
                 $target_rating
             );
         } else {
-            $message = sprintf(__('Successfully retrieved %d valid survey responses', 'alchemer-reviews'), $valid_count);
+            $message = sprintf(__('Successfully retrieved %d valid survey responses', 'alchemer-multi-resort-reviews'), $valid_count);
         }
         
         // Add pagination info
         if ($pages_fetched > 1) {
             $message .= ' ' . sprintf(
-                __('(fetched from %d pages)', 'alchemer-reviews'),
+                __('(fetched from %d pages)', 'alchemer-multi-resort-reviews'),
                 $pages_fetched
             );
         }
@@ -762,7 +767,7 @@ class Alchemer_Reviews_API {
         // Add note if we couldn't find enough reviews
         if (!$import_all_new && $valid_count < $max_reviews) {
             $message .= ' ' . sprintf(
-                __('(Note: Requested %d reviews but only found %d matching the criteria)', 'alchemer-reviews'),
+                __('(Note: Requested %d reviews but only found %d matching the criteria)', 'alchemer-multi-resort-reviews'),
                 $max_reviews,
                 $valid_count
             );
@@ -771,14 +776,14 @@ class Alchemer_Reviews_API {
         // Add skipped info
         if ($skipped_no_content > 0) {
             $message .= ' ' . sprintf(
-                __('(Skipped %d reviews with no content)', 'alchemer-reviews'),
+                __('(Skipped %d reviews with no content)', 'alchemer-multi-resort-reviews'),
                 $skipped_no_content
             );
         }
 
         if ($skipped_existing > 0) {
             $message .= ' ' . sprintf(
-                __('(Skipped %d reviews already in WordPress)', 'alchemer-reviews'),
+                __('(Skipped %d reviews already in WordPress)', 'alchemer-multi-resort-reviews'),
                 $skipped_existing
             );
         }

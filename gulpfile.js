@@ -45,7 +45,7 @@ function styles() {
 function scripts() {
     return gulp.src('assets/js/**/*.js')
         .pipe(sourcemaps.init())
-        .pipe(concat('alchemer-reviews.js'))
+        .pipe(concat('alchemer-multi-resort-reviews.js'))
         .pipe(terser())
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.write('./'))
@@ -100,10 +100,10 @@ function package() {
         'build/**/*',
         '!build/**/*.map' // Exclude source maps from the package
     ])
-    .pipe(zip(`alchemer-reviews-${pluginVersion}.zip`))
+    .pipe(zip(`alchemer-multi-resort-reviews-${pluginVersion}.zip`))
     .pipe(gulp.dest('dist'))
     .on('end', function() {
-        console.log(`Package created: dist/alchemer-reviews-${pluginVersion}.zip`);
+        console.log(`Package created: dist/alchemer-multi-resort-reviews-${pluginVersion}.zip`);
     });
 }
 

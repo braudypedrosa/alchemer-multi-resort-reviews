@@ -69,7 +69,7 @@
     };
 
     $(document).ready(function() {
-        const importButton = document.getElementById('import-alchemer-reviews');
+        const importButton = document.getElementById('import-alchemer-multi-resort-reviews');
         if (importButton) {
             importButton.removeEventListener('click', handleImportButtonClick);
             importButton.addEventListener('click', handleImportButtonClick);
@@ -77,8 +77,8 @@
 
         // Keep delegated binding for late-rendered buttons.
         $(document)
-            .off('click.alchemerReviewsImport', '#import-alchemer-reviews')
-            .on('click.alchemerReviewsImport', '#import-alchemer-reviews', handleImportButtonClick);
+            .off('click.alchemerReviewsImport', '#import-alchemer-multi-resort-reviews')
+            .on('click.alchemerReviewsImport', '#import-alchemer-multi-resort-reviews', handleImportButtonClick);
 
         function handleImportButtonClick(event) {
             const rawEvent = event && (event.originalEvent || event);

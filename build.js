@@ -3,7 +3,7 @@ const archiver = require('archiver');
 const path = require('path');
 const packageJson = require('./package.json');
 
-const pluginName = 'alchemer-reviews';
+const pluginName = 'alchemer-multi-resort-reviews';
 const pluginVersion = packageJson.version;
 const sourceDir = __dirname;
 const buildDir = path.join(sourceDir, 'build');
@@ -43,7 +43,7 @@ archive.pipe(output);
 
 // Files and directories to include
 const filesToInclude = [
-    'alchemer-reviews.php',
+    'alchemer-multi-resort-reviews.php',
     'includes',
     'assets',
     'README.md',
