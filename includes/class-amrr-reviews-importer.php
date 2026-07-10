@@ -1219,14 +1219,17 @@ class AMRR_Importer {
             $review_date = current_time('F j, Y');
         }
         
-        // Prepare the review data with a property-scoped unique ID.
+        // Scope the display ID to both property and survey. Alchemer response
+        // IDs can repeat when a property moves to a different survey.
         $property_slug = sanitize_title( $this->context['slug'] ?? '' );
         $property_name = sanitize_text_field( $this->context['name'] ?? '' );
+        $site_id = sanitize_text_field( $this->context['survey_id'] ?? '' );
         $response_id = isset($response['id']) ? strval($response['id']) : uniqid('review_');
+        $unique_id_parts = array_filter( array( $property_slug, $site_id, $response_id ), 'strlen' );
         $review_data = array(
             'response_id' => $response_id,
-            'unique_id' => $property_slug ? $property_slug . '-' . $response_id : $response_id,
-            'site_id' => sanitize_text_field( $this->context['survey_id'] ?? '' ),
+            'unique_id' => implode( '-', $unique_id_parts ),
+            'site_id' => $site_id,
             'property_slug' => $property_slug,
             'property_name' => $property_name,
             'rating' => $rating,
