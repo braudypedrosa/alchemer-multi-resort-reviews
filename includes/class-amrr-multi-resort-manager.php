@@ -8,8 +8,6 @@ class AMRR_Multi_Resort_Manager {
     public function init() {
         add_action( 'admin_menu', array( $this, 'add_admin_page' ) );
         add_action( 'admin_post_amrr_save_resorts', array( $this, 'save_resorts' ) );
-        add_action( 'admin_post_amrr_sync_resort', array( $this, 'sync_resort_action' ) );
-        add_action( 'admin_post_amrr_sync_all_resorts', array( $this, 'sync_all_action' ) );
         add_action( 'amrr_daily_import', array( $this, 'run_daily_sync_all' ) );
         add_filter( 'manage_amrr-review_posts_columns', array( $this, 'add_property_column' ) );
         add_action( 'manage_amrr-review_posts_custom_column', array( $this, 'render_property_column' ), 10, 2 );
@@ -179,16 +177,14 @@ class AMRR_Multi_Resort_Manager {
         <?php if ( isset( $_GET['amrr_message'] ) ) : ?><div class="notice notice-<?php echo 'error' === ( $_GET['amrr_status'] ?? '' ) ? 'error' : 'success'; ?>"><p><?php echo esc_html( rawurldecode( wp_unslash( $_GET['amrr_message'] ) ) ); ?></p></div><?php endif; ?>
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
         <input type="hidden" name="action" value="amrr_save_resorts"><?php wp_nonce_field( 'amrr_save_resorts' ); ?>
-        <table class="widefat striped"><thead><tr><th>Name</th><th>Slug</th><th>Survey ID</th><th>Rating question</th><th>Name field</th><th>Min rating</th><th>Enabled</th><th>Daily</th><th>Action</th></tr></thead><tbody>
+        <table class="widefat striped"><thead><tr><th>Name</th><th>Slug</th><th>Survey ID</th><th>Rating question</th><th>Name field</th><th>Min rating</th><th>Enabled</th><th>Daily</th></tr></thead><tbody>
         <?php foreach ( $resorts as $index => $resort ) : ?><tr>
             <?php foreach ( array( 'name', 'slug', 'survey_id', 'rating_question', 'reviewer_name' ) as $field ) : ?><td><input type="text" name="resorts[<?php echo intval( $index ); ?>][<?php echo esc_attr( $field ); ?>]" value="<?php echo esc_attr( $resort[$field] ?? '' ); ?>"></td><?php endforeach; ?>
             <td><input type="number" min="1" max="5" name="resorts[<?php echo intval( $index ); ?>][minimum_rating]" value="<?php echo intval( $resort['minimum_rating'] ?? 5 ); ?>" style="width:65px"></td>
             <td><input type="checkbox" name="resorts[<?php echo intval( $index ); ?>][enabled]" value="1" <?php checked( ! empty( $resort['enabled'] ) ); ?>></td>
             <td><input type="checkbox" name="resorts[<?php echo intval( $index ); ?>][auto_import]" value="1" <?php checked( ! empty( $resort['auto_import'] ) ); ?>></td>
-            <td><?php if ( ! empty( $resort['slug'] ) ) : ?><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=amrr_sync_resort&resort=' . rawurlencode( $resort['slug'] ) ), 'amrr_sync_resort_' . $resort['slug'] ) ); ?>"><?php esc_html_e( 'Sync Reviews', 'alchemer-multi-resort-reviews' ); ?></a><?php endif; ?></td>
         </tr><?php endforeach; ?></tbody></table>
-        <?php submit_button( __( 'Save Resorts', 'alchemer-multi-resort-reviews' ) ); ?></form>
-        <p><a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=amrr_sync_all_resorts' ), 'amrr_sync_all_resorts' ) ); ?>"><?php esc_html_e( 'Sync All Enabled Resorts', 'alchemer-multi-resort-reviews' ); ?></a></p></div>
+        <?php submit_button( __( 'Save Resorts', 'alchemer-multi-resort-reviews' ) ); ?></form></div>
         <?php
     }
 }

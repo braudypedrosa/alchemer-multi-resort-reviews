@@ -64,8 +64,13 @@ class AMRR_Importer {
      * @return void
      */
     public function init() {
+        add_action( 'admin_menu', array( $this, 'add_import_reviews_page' ) );
+        add_action( 'wp_ajax_import_alchemer_reviews', array( $this, 'ajax_import_reviews' ) );
+        add_action( 'wp_ajax_process_alchemer_review', array( $this, 'ajax_process_review' ) );
+
         // Surface pending imported reviews on the WordPress Dashboard.
         add_action('admin_notices', array($this, 'render_pending_reviews_dashboard_notice'));
+        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ), 100 );
     }
 
     /**
@@ -76,7 +81,7 @@ class AMRR_Importer {
      */
     public function enqueue_admin_bootstrap($hook) {
         // Only load on our plugin pages
-        if (!in_array($hook, array('amrr-review_page_amrr_field_mapping', 'amrr-review_page_amrr_settings'))) {
+        if (!in_array($hook, array('amrr-review_page_amrr_field_mapping', 'amrr-review_page_amrr_settings', 'amrr-review_page_amrr_import_reviews'))) {
             return;
         }
         
@@ -109,7 +114,7 @@ class AMRR_Importer {
      */
     public function enqueue_admin_styles($hook) {
         // Only load on our plugin pages
-        if (!in_array($hook, array('amrr-review_page_amrr_field_mapping', 'amrr-review_page_amrr_settings'))) {
+        if (!in_array($hook, array('amrr-review_page_amrr_field_mapping', 'amrr-review_page_amrr_settings', 'amrr-review_page_amrr_import_reviews'))) {
             return;
         }
         
@@ -146,6 +151,112 @@ class AMRR_Importer {
         );
         
         wp_enqueue_style('alchemer-tailwind-override');
+    }
+
+    /**
+     * Add the multi-resort import and moderation page.
+     *
+     * @return void
+     */
+    public function add_import_reviews_page() {
+        add_submenu_page(
+            'edit.php?post_type=amrr-review',
+            __( 'Import Reviews', 'alchemer-multi-resort-reviews' ),
+            __( 'Import Reviews', 'alchemer-multi-resort-reviews' ),
+            'manage_options',
+            'amrr_import_reviews',
+            array( $this, 'render_multi_resort_import_page' )
+        );
+    }
+
+    /**
+     * Render the original review approval workflow with a resort selector.
+     *
+     * @return void
+     */
+    public function render_multi_resort_import_page() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        $settings = $this->settings->get_settings();
+        $resorts = AMRR_Multi_Resort_Manager::get_resorts();
+        $enabled_resorts = array_values( array_filter( $resorts, function ( $resort ) {
+            return ! empty( $resort['enabled'] );
+        } ) );
+        $pending_count = wp_count_posts( 'amrr-review' );
+        $pending_count = intval( $pending_count->draft ?? 0 ) + intval( $pending_count->pending ?? 0 );
+        ?>
+        <div class="wrap">
+            <div class="alchemer-admin-area w-full p-6">
+                <h1 class="text-2xl font-bold mb-6"><?php esc_html_e( 'Import Reviews', 'alchemer-multi-resort-reviews' ); ?></h1>
+
+                <?php if ( empty( $settings['api_token'] ) || empty( $settings['api_token_secret'] ) ) : ?>
+                    <div class="alert alert-warning mb-6">
+                        <p><?php esc_html_e( 'Configure the global Alchemer API credentials under Reviews → Settings before importing reviews.', 'alchemer-multi-resort-reviews' ); ?></p>
+                    </div>
+                <?php elseif ( empty( $resorts ) ) : ?>
+                    <div class="alert alert-warning mb-6">
+                        <p><?php esc_html_e( 'Configure at least one property under Reviews → Resorts before importing reviews.', 'alchemer-multi-resort-reviews' ); ?></p>
+                    </div>
+                <?php else : ?>
+                    <div class="dashboard-card w-full fade-in">
+                        <h2 class="text-xl font-medium text-gray-800 mb-4"><?php esc_html_e( 'Pull Reviews from Alchemer', 'alchemer-multi-resort-reviews' ); ?></h2>
+                        <p class="text-gray-600 mb-6"><?php esc_html_e( 'Select a property or pull reviews for every enabled property. Pulled reviews appear below so you can edit, accept, or reject each one.', 'alchemer-multi-resort-reviews' ); ?></p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div>
+                                <label for="amrr-import-resort" class="block text-sm font-medium text-gray-700 mb-1"><?php esc_html_e( 'Property', 'alchemer-multi-resort-reviews' ); ?></label>
+                                <select id="amrr-import-resort" class="form-input block w-full">
+                                    <?php foreach ( $resorts as $resort ) : ?>
+                                        <option value="<?php echo esc_attr( $resort['slug'] ); ?>"><?php echo esc_html( $resort['name'] ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="max-reviews" class="block text-sm font-medium text-gray-700 mb-1"><?php esc_html_e( 'Maximum Reviews per Property', 'alchemer-multi-resort-reviews' ); ?></label>
+                                <input type="number" id="max-reviews" min="1" max="100" value="10" class="form-input block w-full">
+                            </div>
+                            <div>
+                                <label for="target-rating" class="block text-sm font-medium text-gray-700 mb-1"><?php esc_html_e( 'Filter by Rating', 'alchemer-multi-resort-reviews' ); ?></label>
+                                <select id="target-rating" class="form-input block w-full">
+                                    <option value="0"><?php esc_html_e( 'Use property minimum rating', 'alchemer-multi-resort-reviews' ); ?></option>
+                                    <?php for ( $rating = 5; $rating >= 1; $rating-- ) : ?>
+                                        <option value="<?php echo intval( $rating ); ?>"><?php echo esc_html( sprintf( _n( '%d star only', '%d stars only', $rating, 'alchemer-multi-resort-reviews' ), $rating ) ); ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-3 items-center">
+                            <button type="button" id="import-alchemer-multi-resort-reviews" class="alchemer-button alchemer-button-primary alchemer-button-lg">
+                                <span class="dashicons dashicons-download mr-1"></span><?php esc_html_e( 'Sync Selected Property', 'alchemer-multi-resort-reviews' ); ?>
+                            </button>
+                            <button type="button" id="import-all-alchemer-multi-resort-reviews" class="alchemer-button alchemer-button-secondary alchemer-button-lg" <?php disabled( empty( $enabled_resorts ) ); ?>>
+                                <span class="dashicons dashicons-update mr-1"></span><?php esc_html_e( 'Sync All Enabled Properties', 'alchemer-multi-resort-reviews' ); ?>
+                            </button>
+                            <div class="spinner hidden" id="import-spinner"></div>
+                        </div>
+                        <div id="import-result" class="hidden mt-6"></div>
+                    </div>
+                <?php endif; ?>
+
+                <div class="dashboard-card w-full mt-6 fade-in">
+                    <h2 class="text-xl font-medium text-gray-800 mb-3"><?php esc_html_e( 'Pending Review Queue', 'alchemer-multi-resort-reviews' ); ?></h2>
+                    <p class="text-gray-600 mb-4"><?php echo esc_html( sprintf( _n( '%d imported review is awaiting moderation.', '%d imported reviews are awaiting moderation.', $pending_count, 'alchemer-multi-resort-reviews' ), $pending_count ) ); ?></p>
+                    <a class="alchemer-button alchemer-button-secondary" href="<?php echo esc_url( admin_url( 'edit.php?post_type=amrr-review&post_status=draft' ) ); ?>"><?php esc_html_e( 'Review Pending Imports', 'alchemer-multi-resort-reviews' ); ?></a>
+                </div>
+            </div>
+        </div>
+        <?php
+
+        wp_enqueue_script( 'alchemer-multi-resort-reviews-importer', AMRR_PLUGIN_URL . 'assets/js/importer.js', array( 'jquery' ), AMRR_VERSION, true );
+        wp_localize_script( 'alchemer-multi-resort-reviews-importer', 'alchemerReviewsImporter', array(
+            'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce( 'import_alchemer_reviews' ),
+            'errorText' => __( 'Error: ', 'alchemer-multi-resort-reviews' ),
+        ) );
+        wp_enqueue_style( 'alchemer-import-styles', AMRR_PLUGIN_URL . 'assets/css/admin-import.css', array(), AMRR_VERSION );
     }
 
     /**
@@ -588,47 +699,73 @@ class AMRR_Importer {
      * @return void
      */
     public function ajax_import_reviews() {
-        // Check nonce
         check_ajax_referer('import_alchemer_reviews', 'nonce');
-        
-        // Check user capability
+
         if (!current_user_can('manage_options')) {
             wp_send_json_error(array(
                 'message' => __('You do not have permission to perform this action.', 'alchemer-multi-resort-reviews'),
             ));
         }
-        
-        // Get import parameters. Manual imports are always net-new and max-bound.
+
+        $resort_slug = sanitize_title( wp_unslash( $_POST['resort'] ?? '' ) );
+        $sync_all = '__all__' === (string) ( $_POST['resort'] ?? '' );
         $max_reviews = isset($_POST['max_reviews']) ? max(1, intval($_POST['max_reviews'])) : 20;
         $target_rating = isset($_POST['target_rating']) ? intval($_POST['target_rating']) : 0;
-        
-        // Prepare import arguments
-        $import_args = array(
-            'max_reviews' => $max_reviews,
-            'target_rating' => $target_rating,
-            'import_all_new' => false,
-        );
-        
-        // Import reviews
-        $result = $this->import_reviews($import_args);
-        
-        if ($result['success']) {
-            wp_send_json_success(array(
-                'message' => $result['message'],
-                'reviews' => $result['reviews'],
-                'total_found' => $result['total_found'],
-                'skipped' => $result['skipped'],
-                'skipped_existing' => isset($result['skipped_existing']) ? $result['skipped_existing'] : 0,
-                'skipped_no_content' => isset($result['skipped_no_content']) ? $result['skipped_no_content'] : 0,
-                'skipped_wrong_rating' => isset($result['skipped_wrong_rating']) ? $result['skipped_wrong_rating'] : 0,
-                'pages_fetched' => isset($result['pages_fetched']) ? $result['pages_fetched'] : 0,
-                'import_all_new' => !empty($result['import_all_new'])
-            ));
+
+        if ( $sync_all ) {
+            $resorts = array_values( array_filter( AMRR_Multi_Resort_Manager::get_resorts(), function ( $resort ) {
+                return ! empty( $resort['enabled'] );
+            } ) );
         } else {
-            wp_send_json_error(array(
-                'message' => $result['message'],
-            ));
+            $resort = AMRR_Multi_Resort_Manager::get_resort( $resort_slug );
+            $resorts = $resort ? array( $resort ) : array();
         }
+
+        if ( empty( $resorts ) ) {
+            wp_send_json_error( array( 'message' => __( 'Select a valid property before pulling reviews.', 'alchemer-multi-resort-reviews' ) ) );
+        }
+
+        $aggregate = array(
+            'reviews' => array(),
+            'total_found' => 0,
+            'skipped' => 0,
+            'skipped_existing' => 0,
+            'skipped_no_content' => 0,
+            'skipped_wrong_rating' => 0,
+            'pages_fetched' => 0,
+            'errors' => array(),
+        );
+
+        foreach ( $resorts as $resort ) {
+            $scoped_importer = new self( $resort );
+            $result = $scoped_importer->import_reviews( array(
+                'max_reviews' => $max_reviews,
+                'target_rating' => $target_rating,
+                'minimum_rating' => intval( $resort['minimum_rating'] ?? 0 ),
+                'import_all_new' => false,
+                'stop_at_existing' => true,
+            ) );
+
+            if ( empty( $result['success'] ) ) {
+                $aggregate['errors'][] = sprintf( '%s: %s', $resort['name'], $result['message'] ?? __( 'Import failed.', 'alchemer-multi-resort-reviews' ) );
+                continue;
+            }
+
+            $aggregate['reviews'] = array_merge( $aggregate['reviews'], (array) ( $result['reviews'] ?? array() ) );
+            foreach ( array( 'total_found', 'skipped', 'skipped_existing', 'skipped_no_content', 'skipped_wrong_rating', 'pages_fetched' ) as $counter ) {
+                $aggregate[ $counter ] += intval( $result[ $counter ] ?? 0 );
+            }
+        }
+
+        if ( ! empty( $aggregate['errors'] ) && empty( $aggregate['reviews'] ) ) {
+            wp_send_json_error( array( 'message' => implode( ' ', $aggregate['errors'] ) ) );
+        }
+
+        $aggregate['message'] = sprintf(
+            _n( '%d review is ready for moderation.', '%d reviews are ready for moderation.', count( $aggregate['reviews'] ), 'alchemer-multi-resort-reviews' ),
+            count( $aggregate['reviews'] )
+        );
+        wp_send_json_success( $aggregate );
     }
 
     /**
@@ -647,8 +784,8 @@ class AMRR_Importer {
             ));
         }
         
-        // Get review data
-        $review_data = isset($_POST['review_data']) ? $_POST['review_data'] : array();
+        // Get review data and restore the resort-scoped importer context.
+        $review_data = isset($_POST['review_data']) ? wp_unslash( $_POST['review_data'] ) : array();
         $accept = isset($_POST['accept']) ? (bool) $_POST['accept'] : false;
         $edited = isset($_POST['edited']) ? (bool) $_POST['edited'] : false;
         
@@ -658,8 +795,16 @@ class AMRR_Importer {
             ));
         }
         
-        // Process the review
-        $result = $this->process_review($review_data, $accept, $edited);
+        $resort_slug = sanitize_title( $review_data['property_slug'] ?? '' );
+        $resort = AMRR_Multi_Resort_Manager::get_resort( $resort_slug );
+        if ( ! $resort ) {
+            wp_send_json_error( array(
+                'message' => __( 'The review property could not be matched to a configured resort.', 'alchemer-multi-resort-reviews' ),
+            ) );
+        }
+
+        $scoped_importer = new self( $resort );
+        $result = $scoped_importer->process_review($review_data, $accept, $edited);
         
         if ($result['success']) {
             wp_send_json_success(array(

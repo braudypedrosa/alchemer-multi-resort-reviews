@@ -74,11 +74,16 @@
             importButton.removeEventListener('click', handleImportButtonClick);
             importButton.addEventListener('click', handleImportButtonClick);
         }
+        const importAllButton = document.getElementById('import-all-alchemer-multi-resort-reviews');
+        if (importAllButton) {
+            importAllButton.removeEventListener('click', handleImportButtonClick);
+            importAllButton.addEventListener('click', handleImportButtonClick);
+        }
 
         // Keep delegated binding for late-rendered buttons.
         $(document)
-            .off('click.alchemerReviewsImport', '#import-alchemer-multi-resort-reviews')
-            .on('click.alchemerReviewsImport', '#import-alchemer-multi-resort-reviews', handleImportButtonClick);
+            .off('click.alchemerReviewsImport', '#import-alchemer-multi-resort-reviews, #import-all-alchemer-multi-resort-reviews')
+            .on('click.alchemerReviewsImport', '#import-alchemer-multi-resort-reviews, #import-all-alchemer-multi-resort-reviews', handleImportButtonClick);
 
         function handleImportButtonClick(event) {
             const rawEvent = event && (event.originalEvent || event);
@@ -103,6 +108,15 @@
             // Get import parameters
             const maxReviews = $('#max-reviews').val();
             const targetRating = $('#target-rating').val();
+            const resort = $button.attr('id') === 'import-all-alchemer-multi-resort-reviews'
+                ? '__all__'
+                : $('#amrr-import-resort').val();
+
+            if (!resort) {
+                Toast.show('Select a Property', 'Choose a property before pulling reviews.', 'error');
+                importInProgress = false;
+                return;
+            }
             
             // Disable button and show spinner
             $button.prop('disabled', true);
@@ -135,6 +149,7 @@
                 data: {
                     action: 'import_alchemer_reviews',
                     nonce: config.nonce,
+                    resort: resort,
                     max_reviews: maxReviews,
                     target_rating: targetRating
                 },
@@ -234,6 +249,7 @@
                 html += '<div class="flex items-center">';
                 html += '<span class="text-lg font-medium">' + (reviewData.reviewer_name || 'Anonymous') + '</span>';
                 html += '<span class="ml-2 text-sm text-gray-500">' + (reviewData.rating || '0') + ' ★</span>';
+                html += '<span class="ml-2 text-sm text-gray-500">' + (reviewData.property_name || reviewData.property_slug || '') + '</span>';
                 html += '</div>';
 
                 html += '</div>';
@@ -372,6 +388,10 @@
             // Prepare review data for processing
             const reviewData = {
                 response_id: review.review_data.response_id,
+                unique_id: review.review_data.unique_id || '',
+                site_id: review.review_data.site_id || '',
+                property_slug: review.review_data.property_slug || '',
+                property_name: review.review_data.property_name || '',
                 reviewer_name: review.review_data.reviewer_name || 'Anonymous',
                 rating: review.review_data.rating || 0,
                 content: review.review_data.content,
