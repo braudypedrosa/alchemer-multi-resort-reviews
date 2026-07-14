@@ -218,10 +218,13 @@
 }
 
 /* Buttons */
-.amrr-import-control {
+.alchemer-admin-area .amrr-import-control {
     box-sizing: border-box;
-    height: 42px;
-    min-height: 42px;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: 38px !important;
 }
 
 .alchemer-button {

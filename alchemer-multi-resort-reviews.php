@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Alchemer Multi-Resort Reviews
  * Description: Import, moderate, and display Alchemer reviews across multiple resorts or properties.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Braudy Pedrosa
  * Text Domain: alchemer-multi-resort-reviews
  * Domain Path: /languages
@@ -15,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Define plugin constants
-define( 'AMRR_VERSION', '1.0.4' );
+define( 'AMRR_VERSION', '1.0.5' );
 define( 'AMRR_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AMRR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'AMRR_PLUGIN_FILE', __FILE__ );
