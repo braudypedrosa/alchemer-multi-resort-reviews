@@ -229,10 +229,10 @@ class AMRR_Importer {
                         </div>
 
                         <div class="flex flex-wrap gap-3 items-center">
-                            <button type="button" id="import-alchemer-multi-resort-reviews" class="alchemer-button alchemer-button-primary alchemer-button-lg">
+                            <button type="button" id="import-alchemer-multi-resort-reviews" class="alchemer-button alchemer-button-primary">
                                 <span class="dashicons dashicons-download mr-1"></span><?php esc_html_e( 'Sync Selected Property', 'alchemer-multi-resort-reviews' ); ?>
                             </button>
-                            <button type="button" id="import-all-alchemer-multi-resort-reviews" class="alchemer-button alchemer-button-secondary alchemer-button-lg" <?php disabled( empty( $enabled_resorts ) ); ?>>
+                            <button type="button" id="import-all-alchemer-multi-resort-reviews" class="alchemer-button alchemer-button-secondary" <?php disabled( empty( $enabled_resorts ) ); ?>>
                                 <span class="dashicons dashicons-update mr-1"></span><?php esc_html_e( 'Sync All Enabled Properties', 'alchemer-multi-resort-reviews' ); ?>
                             </button>
                             <div class="spinner hidden" id="import-spinner"></div>
