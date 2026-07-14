@@ -98,14 +98,6 @@ class AMRR_Settings {
         );
 
         add_settings_field(
-            'survey_id',
-            __( 'Survey ID', 'alchemer-multi-resort-reviews' ),
-            array( $this, 'render_survey_id_field' ),
-            'amrr_settings',
-            'alchemer_api_settings'
-        );
-        
-        add_settings_field(
             'test_connection',
             __( 'Test Connection', 'alchemer-multi-resort-reviews' ),
             array( $this, 'render_test_connection_field' ),
@@ -133,10 +125,6 @@ class AMRR_Settings {
             $sanitized_input['api_token_secret'] = trim( $input['api_token_secret'] );
         }
 
-        if ( isset( $input['survey_id'] ) ) {
-            $sanitized_input['survey_id'] = sanitize_text_field( $input['survey_id'] );
-        }
-        
         // Set transient for admin notice
         set_transient( 'amrr_settings_updated', true, 5 );
         
@@ -173,16 +161,15 @@ class AMRR_Settings {
         // Check if API credentials are set
         $options = $this->get_settings();
         if ( 
-            empty( $options['api_token'] ) || 
-            empty( $options['api_token_secret'] ) || 
-            empty( $options['survey_id'] ) 
+            empty( $options['api_token'] ) ||
+            empty( $options['api_token_secret'] )
         ) {
             ?>
             <div class="alchemer-admin-area mb-4">
                 <div class="alert alert-warning">
                     <div class="flex items-center">
                         <span class="dashicons dashicons-warning mr-2"></span>
-                        <p><?php _e( 'Please complete your Alchemer API settings. All fields are required to connect to the Alchemer API.', 'alchemer-multi-resort-reviews' ); ?></p>
+                        <p><?php _e( 'Please enter the global Alchemer API token and token secret.', 'alchemer-multi-resort-reviews' ); ?></p>
                     </div>
                 </div>
             </div>
@@ -283,11 +270,6 @@ class AMRR_Settings {
                                 <div class="form-help-text"><?php _e('Enter your Alchemer API Token Secret (e.g., A9J%2FCA2zvJRcQ). Make sure to copy it exactly as shown in your Alchemer account, including any URL-encoded characters like %2F.', 'alchemer-multi-resort-reviews'); ?></div>
                                 <div class="form-help-text text-red-600 font-medium mt-1"><?php _e('Important: Do not modify special characters like %2F in the token. These are part of the API key and must be preserved exactly as shown in your Alchemer account.', 'alchemer-multi-resort-reviews'); ?></div>
                             </div>
-                            <div class="form-input-container w-full">
-                                <label for="survey_id" class="form-label"><?php _e('Survey ID', 'alchemer-multi-resort-reviews'); ?></label>
-                                <input type="text" id="survey_id" name="<?php echo esc_attr($this->option_name); ?>[survey_id]" value="<?php echo esc_attr(isset($this->get_settings()['survey_id']) ? $this->get_settings()['survey_id'] : ''); ?>" class="form-input">
-                                <div class="form-help-text"><?php _e('Enter the Alchemer Survey ID to pull reviews from.', 'alchemer-multi-resort-reviews'); ?></div>
-                            </div>
                             <div class="mt-6">
                                 <button type="submit" class="alchemer-button alchemer-button-primary"><?php _e('Save Settings', 'alchemer-multi-resort-reviews'); ?></button>
                             </div>
@@ -306,16 +288,10 @@ class AMRR_Settings {
                             </div>
                             <div id="test-connection-result" class="mt-3"></div>
                         </div>
-                        <div class="text-sm text-gray-500">
-                            <?php _e('Sample API call format:', 'alchemer-multi-resort-reviews'); ?>
-                            <code class="bg-gray-100 px-2 py-1 rounded text-sm block mt-1 overflow-x-auto whitespace-nowrap">
-                                https://api.alchemer.com/v5/survey/YOUR_SURVEY_ID/surveyresponse?api_token=YOUR_TOKEN&api_token_secret=YOUR_SECRET
-                            </code>
-                        </div>
+                        <p class="text-sm text-gray-500"><?php _e( 'Survey IDs and field mappings are configured per property under Reviews → Resorts.', 'alchemer-multi-resort-reviews' ); ?></p>
                     </div>
                 </div>
 
-                <?php do_action( 'amrr_after_settings' ); ?>
             </div>
         </div>
         <?php
@@ -375,8 +351,13 @@ class AMRR_Settings {
         // Load API class
         require_once AMRR_PLUGIN_DIR . 'includes/class-amrr-reviews-api.php';
         
-        // Create API instance
-        $api = new AMRR_API();
+        // Test the global account credentials. Survey IDs belong to resorts.
+        $settings = $this->get_settings();
+        $api = new AMRR_API(
+            $settings['api_token'] ?? '',
+            $settings['api_token_secret'] ?? '',
+            ''
+        );
         
         // Test connection
         $result = $api->test_connection();

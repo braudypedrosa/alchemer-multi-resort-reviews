@@ -64,26 +64,8 @@ class AMRR_Importer {
      * @return void
      */
     public function init() {
-        // Add import button to the settings page
-        add_action('amrr_after_settings', array($this, 'render_import_button'));
-        
-        // Register AJAX handlers for importing reviews
-        add_action('wp_ajax_import_alchemer_reviews', array($this, 'ajax_import_reviews'));
-        add_action('wp_ajax_process_alchemer_review', array($this, 'ajax_process_review'));
-        
-        // Add admin menu for field mapping
-        add_action('admin_menu', array($this, 'add_field_mapping_page'));
-        
-        // Register settings for field mappings
-        add_action('admin_init', array($this, 'register_field_mapping_settings'));
-        
-        // The multi-resort manager owns the daily cron and creates a scoped importer per resort.
-
         // Surface pending imported reviews on the WordPress Dashboard.
         add_action('admin_notices', array($this, 'render_pending_reviews_dashboard_notice'));
-        
-        // Enqueue Tailwind for admin pages
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'), 100);
     }
 
     /**

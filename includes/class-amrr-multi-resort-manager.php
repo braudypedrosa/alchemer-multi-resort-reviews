@@ -185,7 +185,7 @@ class AMRR_Multi_Resort_Manager {
             <td><input type="number" min="1" max="5" name="resorts[<?php echo intval( $index ); ?>][minimum_rating]" value="<?php echo intval( $resort['minimum_rating'] ?? 5 ); ?>" style="width:65px"></td>
             <td><input type="checkbox" name="resorts[<?php echo intval( $index ); ?>][enabled]" value="1" <?php checked( ! empty( $resort['enabled'] ) ); ?>></td>
             <td><input type="checkbox" name="resorts[<?php echo intval( $index ); ?>][auto_import]" value="1" <?php checked( ! empty( $resort['auto_import'] ) ); ?>></td>
-            <td><?php if ( ! empty( $resort['slug'] ) ) : ?><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=amrr_sync_resort&resort=' . rawurlencode( $resort['slug'] ) ), 'amrr_sync_resort_' . $resort['slug'] ) ); ?>">Sync</a><?php endif; ?></td>
+            <td><?php if ( ! empty( $resort['slug'] ) ) : ?><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=amrr_sync_resort&resort=' . rawurlencode( $resort['slug'] ) ), 'amrr_sync_resort_' . $resort['slug'] ) ); ?>"><?php esc_html_e( 'Sync Reviews', 'alchemer-multi-resort-reviews' ); ?></a><?php endif; ?></td>
         </tr><?php endforeach; ?></tbody></table>
         <?php submit_button( __( 'Save Resorts', 'alchemer-multi-resort-reviews' ) ); ?></form>
         <p><a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=amrr_sync_all_resorts' ), 'amrr_sync_all_resorts' ) ); ?>"><?php esc_html_e( 'Sync All Enabled Resorts', 'alchemer-multi-resort-reviews' ); ?></a></p></div>

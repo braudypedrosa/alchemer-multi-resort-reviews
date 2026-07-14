@@ -50,7 +50,7 @@ class AMRR_API {
         $this->field_mappings = (array) $field_mappings;
 
         // If no credentials provided, try to get them from settings
-        if ( empty( $this->api_token ) || empty( $this->api_token_secret ) || empty( $this->survey_id ) ) {
+        if ( empty( $this->api_token ) || empty( $this->api_token_secret ) ) {
             $this->load_credentials_from_settings();
         }
     }
@@ -177,7 +177,7 @@ class AMRR_API {
         if (empty($this->survey_id)) {
             return array(
                 'success' => true,
-                'message' => __( 'API connection successful! Please enter a Survey ID to complete the setup.', 'alchemer-multi-resort-reviews' ),
+                'message' => __( 'API connection successful! Survey IDs are configured per property under Reviews → Resorts.', 'alchemer-multi-resort-reviews' ),
                 'account_info' => isset($data['data']) ? $data['data'] : array(),
             );
         }
