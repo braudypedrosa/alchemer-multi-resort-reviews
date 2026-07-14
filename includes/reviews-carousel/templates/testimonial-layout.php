@@ -8,9 +8,9 @@ $slides_to_show = isset($atts['slides_to_show']) ? intval($atts['slides_to_show'
 // Convert center_mode to boolean
 $center_mode = isset($atts['center_mode']) ? filter_var($atts['center_mode'], FILTER_VALIDATE_BOOLEAN) : false;
 ?>
-<div class="alchemer-reviews alchemer-reviews-testimonial">
+<div class="alchemer-multi-resort-reviews alchemer-multi-resort-reviews-testimonial">
     <?php if (!empty($atts['title'])): ?>
-        <h2 class="alchemer-reviews-title"><?php echo esc_html($atts['title']); ?></h2>
+        <h2 class="alchemer-multi-resort-reviews-title"><?php echo esc_html($atts['title']); ?></h2>
     <?php endif; ?>
 
     <div class="alchemer-testimonial-slider" data-slider-id="<?php echo esc_attr($slider_id); ?>" data-center-mode="<?php echo esc_attr($center_mode); ?>" data-slides-to-show="<?php echo esc_attr($slides_to_show); ?>">
@@ -18,13 +18,13 @@ $center_mode = isset($atts['center_mode']) ? filter_var($atts['center_mode'], FI
             <?php foreach ($reviews as $index => $review) : ?>
                 <div class="alchemer-testimonial-slide <?php echo $index === 1 ? 'active center' : ''; ?>">
                     <div class="alchemer-testimonial-content alchemer-testimonial-slide-inner">
-                        <div class="alchemer-reviewer-info">
-                            <div class="alchemer-reviewer-meta">
-                                <h3 class="alchemer-reviewer-name"><?php echo esc_html($review['name']); ?></h3>
-                                <div class="alchemer-review-date"><?php echo date('F j, Y', strtotime($review['date'])); ?></div>
+                        <div class="amrr-reviewer-info">
+                            <div class="amrr-reviewer-meta">
+                                <h3 class="amrr-reviewer-name"><?php echo esc_html($review['name']); ?></h3>
+                                <div class="amrr-review-date"><?php echo date('F j, Y', strtotime($review['date'])); ?></div>
                             </div>
                         </div>
-                        <div class="alchemer-review-rating">
+                        <div class="amrr-review-rating">
                             <?php echo $this->generate_stars($review['rating']); ?>
                         </div>
                         <div class="alchemer-testimonial-content">

@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 /**
 * Documentation class for Alchemer Review Carousel
 */
-class Alchemer_Review_Carousel_Docs {
+class AMRR_Review_Carousel_Docs {
    
    /**
     * Constructor
@@ -27,11 +27,11 @@ class Alchemer_Review_Carousel_Docs {
     */
    public function add_documentation_page() {
        add_submenu_page(
-           'edit.php?post_type=alchemer-review',
+           'edit.php?post_type=amrr-review',
            'Documentation',
            'Documentation',
            'manage_options',
-           'alchemer-review-carousel-docs',
+           'amrr-review-carousel-docs',
            array($this, 'render_documentation_page')
        );
    }
@@ -54,15 +54,15 @@ class Alchemer_Review_Carousel_Docs {
                <p>The plugin provides three main shortcodes to display reviews in different layouts:</p>
                
                <h3>1. List Layout</h3>
-               <pre><code>[alchemer_reviews_list]</code></pre>
+               <pre><code>[amrr_list]</code></pre>
                <p>Displays reviews in a vertical list format.</p>
                
                <h3>2. Grid Layout</h3>
-               <pre><code>[alchemer_reviews_grid]</code></pre>
+               <pre><code>[amrr_grid]</code></pre>
                <p>Displays reviews in a grid layout with navigation arrows.</p>
                
                <h3>3. Testimonial Carousel</h3>
-               <pre><code>[alchemer_reviews_testimonial]</code></pre>
+               <pre><code>[amrr_testimonial]</code></pre>
                <p>Displays reviews in a testimonial carousel with smooth animations.</p>
            </div>
            
@@ -134,29 +134,29 @@ class Alchemer_Review_Carousel_Docs {
                <h2>Usage Examples</h2>
                
                <h3>Basic Usage</h3>
-               <pre><code>[alchemer_reviews_list]
-[alchemer_reviews_grid]
-[alchemer_reviews_testimonial]</code></pre>
+               <pre><code>[amrr_list]
+[amrr_grid]
+[amrr_testimonial]</code></pre>
                
                <h3>With Common Parameters</h3>
-               <pre><code>[alchemer_reviews_list title="Customer Feedback" count="5"]
-[alchemer_reviews_grid title="Recent Reviews" count="6" demo="false"]
-[alchemer_reviews_testimonial title="What People Say" count="-1" demo="true"]</code></pre>
+               <pre><code>[amrr_list title="Customer Feedback" count="5"]
+[amrr_grid title="Recent Reviews" count="6" demo="false"]
+[amrr_testimonial title="What People Say" count="-1" demo="true"]</code></pre>
                
                <h3>Testimonial Carousel with Multiple Slides</h3>
-               <pre><code>[alchemer_reviews_testimonial slides_to_show="3" title="Customer Testimonials"]</code></pre>
+               <pre><code>[amrr_testimonial slides_to_show="3" title="Customer Testimonials"]</code></pre>
                <p>This will display 3 testimonials at once in the carousel.</p>
                
                <h3>Testimonial Carousel with Center Mode</h3>
-               <pre><code>[alchemer_reviews_testimonial center_mode="true" title="Featured Reviews"]</code></pre>
+               <pre><code>[amrr_testimonial center_mode="true" title="Featured Reviews"]</code></pre>
                <p>This will enable center mode, highlighting the active slide.</p>
                
                <h3>Combining Multiple Parameters</h3>
-               <pre><code>[alchemer_reviews_testimonial slides_to_show="3" center_mode="true" title="What Our Clients Say" count="9" demo="true"]</code></pre>
+               <pre><code>[amrr_testimonial slides_to_show="3" center_mode="true" title="What Our Clients Say" count="9" demo="true"]</code></pre>
                <p>This will display 3 demo testimonials at once with center mode enabled.</p>
                
                <h3>In a Template File</h3>
-               <pre><code>&lt;?php echo do_shortcode('[alchemer_reviews_testimonial slides_to_show="3" center_mode="true"]'); ?&gt;</code></pre>
+               <pre><code>&lt;?php echo do_shortcode('[amrr_testimonial slides_to_show="3" center_mode="true"]'); ?&gt;</code></pre>
            </div>
            
            <div class="card">
@@ -173,7 +173,7 @@ class Alchemer_Review_Carousel_Docs {
            <div class="card">
                <h2>Demo Data</h2>
                <p>The plugin includes demo data that can be displayed by setting the <code>demo</code> parameter to <code>true</code>. This is useful for testing or when you don't have any reviews yet.</p>
-               <pre><code>[alchemer_reviews_list demo="true"]</code></pre>
+               <pre><code>[amrr_list demo="true"]</code></pre>
            </div>
            
            <div class="card">
@@ -229,25 +229,25 @@ class Alchemer_Review_Carousel_Docs {
                
                <h4>Common Classes</h4>
                <ul>
-                   <li><code>.alchemer-reviews</code> - Main container for all layouts</li>
-                   <li><code>.alchemer-reviews-title</code> - Title heading</li>
+                   <li><code>.alchemer-multi-resort-reviews</code> - Main container for all layouts</li>
+                   <li><code>.alchemer-multi-resort-reviews-title</code> - Title heading</li>
                    <li><code>.alchemer-star</code> - Star rating icons</li>
                    <li><code>.alchemer-nav-button</code> - Navigation buttons</li>
                </ul>
                
                <h4>List Layout Classes</h4>
                <ul>
-                   <li><code>.alchemer-reviews-list</code> - List layout container</li>
-                   <li><code>.alchemer-review-item</code> - Individual review container</li>
-                   <li><code>.alchemer-reviewer-name</code> - Reviewer name</li>
-                   <li><code>.alchemer-review-date</code> - Review date</li>
-                   <li><code>.alchemer-review-rating</code> - Rating container</li>
-                   <li><code>.alchemer-review-content</code> - Review content</li>
+                   <li><code>.alchemer-multi-resort-reviews-list</code> - List layout container</li>
+                   <li><code>.amrr-review-item</code> - Individual review container</li>
+                   <li><code>.amrr-reviewer-name</code> - Reviewer name</li>
+                   <li><code>.amrr-review-date</code> - Review date</li>
+                   <li><code>.amrr-review-rating</code> - Rating container</li>
+                   <li><code>.amrr-review-content</code> - Review content</li>
                </ul>
                
                <h4>Grid Layout Classes</h4>
                <ul>
-                   <li><code>.alchemer-reviews-grid</code> - Grid layout container</li>
+                   <li><code>.alchemer-multi-resort-reviews-grid</code> - Grid layout container</li>
                    <li><code>.alchemer-grid-container</code> - Grid items container</li>
                    <li><code>.alchemer-grid-item</code> - Individual grid item</li>
                    <li><code>.alchemer-grid-navigation</code> - Grid navigation container</li>
@@ -255,7 +255,7 @@ class Alchemer_Review_Carousel_Docs {
                
                <h4>Testimonial Layout Classes</h4>
                <ul>
-                   <li><code>.alchemer-reviews-testimonial</code> - Testimonial layout container</li>
+                   <li><code>.alchemer-multi-resort-reviews-testimonial</code> - Testimonial layout container</li>
                    <li><code>.alchemer-testimonial-slider</code> - Slider container</li>
                    <li><code>.alchemer-testimonial-track</code> - Track that holds all slides</li>
                    <li><code>.alchemer-testimonial-slide</code> - Individual slide</li>
@@ -273,7 +273,7 @@ class Alchemer_Review_Carousel_Docs {
                <ol>
                    <li>Ensure you have published reviews in the "Alchemer Review" post type</li>
                    <li>Check that your reviews have the required meta fields (_alchemer_rating and _alchemer_review_date)</li>
-                   <li>Try using the demo parameter: <code>[alchemer_reviews_list demo="true"]</code></li>
+                   <li>Try using the demo parameter: <code>[amrr_list demo="true"]</code></li>
                </ol>
                
                <h3>Styling Issues</h3>
@@ -365,4 +365,4 @@ class Alchemer_Review_Carousel_Docs {
 }
 
 // Initialize the documentation
-new Alchemer_Review_Carousel_Docs();
+new AMRR_Review_Carousel_Docs();

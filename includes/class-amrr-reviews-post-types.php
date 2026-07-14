@@ -4,7 +4,7 @@
  *
  * @since 1.0.0
  */
-class Alchemer_Reviews_Post_Types {
+class AMRR_Post_Types {
 
     /**
      * Initialize the class and set its hooks.
@@ -19,19 +19,19 @@ class Alchemer_Reviews_Post_Types {
         add_action( 'add_meta_boxes', array( $this, 'add_review_meta_boxes' ) );
         
         // Save meta box data
-        add_action( 'save_post_alchemer-review', array( $this, 'save_review_meta' ) );
+        add_action( 'save_post_amrr-review', array( $this, 'save_review_meta' ) );
         
         // Automatically set manually_edited flag when content is updated through the editor
         add_action( 'post_updated', array( $this, 'maybe_set_manually_edited_flag' ), 10, 3 );
         
         // Add columns to the reviews list
-        add_filter( 'manage_alchemer-review_posts_columns', array( $this, 'add_review_columns' ) );
+        add_filter( 'manage_amrr-review_posts_columns', array( $this, 'add_review_columns' ) );
         
         // Display column content
-        add_action( 'manage_alchemer-review_posts_custom_column', array( $this, 'display_review_column_content' ), 10, 2 );
+        add_action( 'manage_amrr-review_posts_custom_column', array( $this, 'display_review_column_content' ), 10, 2 );
         
         // Make columns sortable
-        add_filter( 'manage_edit-alchemer-review_sortable_columns', array( $this, 'make_review_columns_sortable' ) );
+        add_filter( 'manage_edit-amrr-review_sortable_columns', array( $this, 'make_review_columns_sortable' ) );
         
         // Sort by custom columns
         add_action( 'pre_get_posts', array( $this, 'sort_reviews_by_custom_column' ) );
@@ -46,36 +46,36 @@ class Alchemer_Reviews_Post_Types {
     }
 
     /**
-     * Register the 'alchemer-review' custom post type
+     * Register the 'amrr-review' custom post type
      *
      * @return void
      */
     public function register_review_post_type() {
         $labels = array(
-            'name'                  => _x( 'Reviews', 'Post type general name', 'alchemer-reviews' ),
-            'singular_name'         => _x( 'Review', 'Post type singular name', 'alchemer-reviews' ),
-            'menu_name'             => _x( 'Reviews', 'Admin Menu text', 'alchemer-reviews' ),
-            'name_admin_bar'        => _x( 'Review', 'Add New on Toolbar', 'alchemer-reviews' ),
-            'add_new'               => __( 'Add New', 'alchemer-reviews' ),
-            'add_new_item'          => __( 'Add New Review', 'alchemer-reviews' ),
-            'new_item'              => __( 'New Review', 'alchemer-reviews' ),
-            'edit_item'             => __( 'Edit Review', 'alchemer-reviews' ),
-            'view_item'             => __( 'View Review', 'alchemer-reviews' ),
-            'all_items'             => __( 'All Reviews', 'alchemer-reviews' ),
-            'search_items'          => __( 'Search Reviews', 'alchemer-reviews' ),
-            'parent_item_colon'     => __( 'Parent Reviews:', 'alchemer-reviews' ),
-            'not_found'             => __( 'No reviews found.', 'alchemer-reviews' ),
-            'not_found_in_trash'    => __( 'No reviews found in Trash.', 'alchemer-reviews' ),
-            'featured_image'        => _x( 'Review Cover Image', 'Overrides the "Featured Image" phrase', 'alchemer-reviews' ),
-            'set_featured_image'    => _x( 'Set cover image', 'Overrides the "Set featured image" phrase', 'alchemer-reviews' ),
-            'remove_featured_image' => _x( 'Remove cover image', 'Overrides the "Remove featured image" phrase', 'alchemer-reviews' ),
-            'use_featured_image'    => _x( 'Use as cover image', 'Overrides the "Use as featured image" phrase', 'alchemer-reviews' ),
-            'archives'              => _x( 'Review archives', 'The post type archive label used in nav menus', 'alchemer-reviews' ),
-            'insert_into_item'      => _x( 'Insert into review', 'Overrides the "Insert into post" phrase', 'alchemer-reviews' ),
-            'uploaded_to_this_item' => _x( 'Uploaded to this review', 'Overrides the "Uploaded to this post" phrase', 'alchemer-reviews' ),
-            'filter_items_list'     => _x( 'Filter reviews list', 'Screen reader text for the filter links', 'alchemer-reviews' ),
-            'items_list_navigation' => _x( 'Reviews list navigation', 'Screen reader text for the pagination', 'alchemer-reviews' ),
-            'items_list'            => _x( 'Reviews list', 'Screen reader text for the items list', 'alchemer-reviews' ),
+            'name'                  => _x( 'Reviews', 'Post type general name', 'alchemer-multi-resort-reviews' ),
+            'singular_name'         => _x( 'Review', 'Post type singular name', 'alchemer-multi-resort-reviews' ),
+            'menu_name'             => _x( 'Reviews', 'Admin Menu text', 'alchemer-multi-resort-reviews' ),
+            'name_admin_bar'        => _x( 'Review', 'Add New on Toolbar', 'alchemer-multi-resort-reviews' ),
+            'add_new'               => __( 'Add New', 'alchemer-multi-resort-reviews' ),
+            'add_new_item'          => __( 'Add New Review', 'alchemer-multi-resort-reviews' ),
+            'new_item'              => __( 'New Review', 'alchemer-multi-resort-reviews' ),
+            'edit_item'             => __( 'Edit Review', 'alchemer-multi-resort-reviews' ),
+            'view_item'             => __( 'View Review', 'alchemer-multi-resort-reviews' ),
+            'all_items'             => __( 'All Reviews', 'alchemer-multi-resort-reviews' ),
+            'search_items'          => __( 'Search Reviews', 'alchemer-multi-resort-reviews' ),
+            'parent_item_colon'     => __( 'Parent Reviews:', 'alchemer-multi-resort-reviews' ),
+            'not_found'             => __( 'No reviews found.', 'alchemer-multi-resort-reviews' ),
+            'not_found_in_trash'    => __( 'No reviews found in Trash.', 'alchemer-multi-resort-reviews' ),
+            'featured_image'        => _x( 'Review Cover Image', 'Overrides the "Featured Image" phrase', 'alchemer-multi-resort-reviews' ),
+            'set_featured_image'    => _x( 'Set cover image', 'Overrides the "Set featured image" phrase', 'alchemer-multi-resort-reviews' ),
+            'remove_featured_image' => _x( 'Remove cover image', 'Overrides the "Remove featured image" phrase', 'alchemer-multi-resort-reviews' ),
+            'use_featured_image'    => _x( 'Use as cover image', 'Overrides the "Use as featured image" phrase', 'alchemer-multi-resort-reviews' ),
+            'archives'              => _x( 'Review archives', 'The post type archive label used in nav menus', 'alchemer-multi-resort-reviews' ),
+            'insert_into_item'      => _x( 'Insert into review', 'Overrides the "Insert into post" phrase', 'alchemer-multi-resort-reviews' ),
+            'uploaded_to_this_item' => _x( 'Uploaded to this review', 'Overrides the "Uploaded to this post" phrase', 'alchemer-multi-resort-reviews' ),
+            'filter_items_list'     => _x( 'Filter reviews list', 'Screen reader text for the filter links', 'alchemer-multi-resort-reviews' ),
+            'items_list_navigation' => _x( 'Reviews list navigation', 'Screen reader text for the pagination', 'alchemer-multi-resort-reviews' ),
+            'items_list'            => _x( 'Reviews list', 'Screen reader text for the items list', 'alchemer-multi-resort-reviews' ),
         );
 
         $args = array(
@@ -85,7 +85,7 @@ class Alchemer_Reviews_Post_Types {
             'show_ui'            => true,
             'show_in_menu'       => true,
             'query_var'          => true,
-            'rewrite'            => array( 'slug' => 'alchemer-reviews' ),
+            'rewrite'            => array( 'slug' => 'alchemer-multi-resort-reviews' ),
             'capability_type'    => 'post',
             'has_archive'        => true,
             'hierarchical'       => false,
@@ -95,7 +95,7 @@ class Alchemer_Reviews_Post_Types {
             'show_in_rest'       => true,
         );
 
-        register_post_type( 'alchemer-review', $args );
+        register_post_type( 'amrr-review', $args );
     }
 
     /**
@@ -106,18 +106,18 @@ class Alchemer_Reviews_Post_Types {
     public function add_review_meta_boxes() {
         add_meta_box(
             'alchemer_review_details',
-            __( 'Review Details', 'alchemer-reviews' ),
+            __( 'Review Details', 'alchemer-multi-resort-reviews' ),
             array( $this, 'render_review_details_meta_box' ),
-            'alchemer-review',
+            'amrr-review',
             'side',
             'high'
         );
 
         add_meta_box(
             'alchemer_original_review',
-            __( 'Original Review Content', 'alchemer-reviews' ),
+            __( 'Original Review Content', 'alchemer-multi-resort-reviews' ),
             array( $this, 'render_original_review_meta_box' ),
-            'alchemer-review',
+            'amrr-review',
             'normal',
             'high'
         );
@@ -144,43 +144,43 @@ class Alchemer_Reviews_Post_Types {
         $response_id = get_post_meta( $post->ID, '_alchemer_response_id', true );
         
         ?>
-        <div class="alchemer-review-details-fields">
-            <div class="alchemer-review-field">
-                <label for="alchemer_reviewer_name"><?php _e( 'Reviewer Name:', 'alchemer-reviews' ); ?></label>
+        <div class="amrr-review-details-fields">
+            <div class="amrr-review-field">
+                <label for="alchemer_reviewer_name"><?php _e( 'Reviewer Name:', 'alchemer-multi-resort-reviews' ); ?></label>
                 <input type="text" id="alchemer_reviewer_name" name="alchemer_reviewer_name" value="<?php echo esc_attr( $reviewer_name ); ?>" class="widefat">
             </div>
 
-            <div class="alchemer-review-field">
-                <label for="alchemer_rating"><?php _e( 'Rating:', 'alchemer-reviews' ); ?></label>
+            <div class="amrr-review-field">
+                <label for="alchemer_rating"><?php _e( 'Rating:', 'alchemer-multi-resort-reviews' ); ?></label>
                 <select id="alchemer_rating" name="alchemer_rating" class="widefat">
-                    <option value="0" <?php selected( $rating, 0 ); ?>><?php _e( 'No rating', 'alchemer-reviews' ); ?></option>
-                    <option value="1" <?php selected( $rating, 1 ); ?>>1 - <?php _e( 'Poor', 'alchemer-reviews' ); ?></option>
-                    <option value="2" <?php selected( $rating, 2 ); ?>>2 - <?php _e( 'Fair', 'alchemer-reviews' ); ?></option>
-                    <option value="3" <?php selected( $rating, 3 ); ?>>3 - <?php _e( 'Average', 'alchemer-reviews' ); ?></option>
-                    <option value="4" <?php selected( $rating, 4 ); ?>>4 - <?php _e( 'Good', 'alchemer-reviews' ); ?></option>
-                    <option value="5" <?php selected( $rating, 5 ); ?>>5 - <?php _e( 'Excellent', 'alchemer-reviews' ); ?></option>
+                    <option value="0" <?php selected( $rating, 0 ); ?>><?php _e( 'No rating', 'alchemer-multi-resort-reviews' ); ?></option>
+                    <option value="1" <?php selected( $rating, 1 ); ?>>1 - <?php _e( 'Poor', 'alchemer-multi-resort-reviews' ); ?></option>
+                    <option value="2" <?php selected( $rating, 2 ); ?>>2 - <?php _e( 'Fair', 'alchemer-multi-resort-reviews' ); ?></option>
+                    <option value="3" <?php selected( $rating, 3 ); ?>>3 - <?php _e( 'Average', 'alchemer-multi-resort-reviews' ); ?></option>
+                    <option value="4" <?php selected( $rating, 4 ); ?>>4 - <?php _e( 'Good', 'alchemer-multi-resort-reviews' ); ?></option>
+                    <option value="5" <?php selected( $rating, 5 ); ?>>5 - <?php _e( 'Excellent', 'alchemer-multi-resort-reviews' ); ?></option>
                 </select>
             </div>
 
-            <div class="alchemer-review-field alchemer-rating-display">
+            <div class="amrr-review-field alchemer-rating-display">
                 <?php echo $this->get_rating_stars( $rating ); ?>
             </div>
 
-            <div class="alchemer-review-field alchemer-review-inline-meta">
-                <span class="alchemer-review-field-label"><?php _e( 'Import Status:', 'alchemer-reviews' ); ?></span>
+            <div class="amrr-review-field amrr-review-inline-meta">
+                <span class="amrr-review-field-label"><?php _e( 'Import Status:', 'alchemer-multi-resort-reviews' ); ?></span>
                 <span><?php echo esc_html( $this->get_review_decision_label( $review_decision, $reviewed ) ); ?></span>
             </div>
 
-            <div class="alchemer-review-field">
-                <label class="alchemer-review-checkbox-label">
+            <div class="amrr-review-field">
+                <label class="amrr-review-checkbox-label">
                     <input type="checkbox" name="alchemer_manually_edited" value="1" <?php checked( $skip_overwrite, '1' ); ?>>
-                    <span><?php _e( 'Skip Overwrite (protect from updates during imports)', 'alchemer-reviews' ); ?></span>
+                    <span><?php _e( 'Skip Overwrite (protect from updates during imports)', 'alchemer-multi-resort-reviews' ); ?></span>
                 </label>
             </div>
 
             <?php if ( $response_id ) : ?>
-                <div class="alchemer-review-field alchemer-review-inline-meta">
-                    <span class="alchemer-review-field-label"><?php _e( 'Alchemer Response ID:', 'alchemer-reviews' ); ?></span>
+                <div class="amrr-review-field amrr-review-inline-meta">
+                    <span class="amrr-review-field-label"><?php _e( 'Alchemer Response ID:', 'alchemer-multi-resort-reviews' ); ?></span>
                     <span class="alchemer-response-id"><?php echo esc_html( $response_id ); ?></span>
                 </div>
             <?php endif; ?>
@@ -253,8 +253,8 @@ class Alchemer_Reviews_Post_Types {
      * @return void
      */
     public function maybe_set_manually_edited_flag( $post_id, $post_after, $post_before ) {
-        // Check if the post type is 'alchemer-review'
-        if ( $post_after->post_type !== 'alchemer-review' ) {
+        // Check if the post type is 'amrr-review'
+        if ( $post_after->post_type !== 'amrr-review' ) {
             return;
         }
         
@@ -281,11 +281,11 @@ class Alchemer_Reviews_Post_Types {
             $new_columns[ $key ] = $value;
             
             if ( $key === 'title' ) {
-                $new_columns['review_content'] = __( 'Review Content', 'alchemer-reviews' );
-                $new_columns['rating'] = __( 'Rating', 'alchemer-reviews' );
-                $new_columns['review_decision'] = __( 'Import Status', 'alchemer-reviews' );
-                $new_columns['skip_overwrite'] = __( 'Skip Overwrite', 'alchemer-reviews' );
-                $new_columns['actions'] = __( 'Actions', 'alchemer-reviews' );
+                $new_columns['review_content'] = __( 'Review Content', 'alchemer-multi-resort-reviews' );
+                $new_columns['rating'] = __( 'Rating', 'alchemer-multi-resort-reviews' );
+                $new_columns['review_decision'] = __( 'Import Status', 'alchemer-multi-resort-reviews' );
+                $new_columns['skip_overwrite'] = __( 'Skip Overwrite', 'alchemer-multi-resort-reviews' );
+                $new_columns['actions'] = __( 'Actions', 'alchemer-multi-resort-reviews' );
             }
         }
         
@@ -332,8 +332,8 @@ class Alchemer_Reviews_Post_Types {
                 echo '<span class="alchemer-toggle-slider"></span>';
                 echo '</label>';
                 echo '<span class="alchemer-toggle-status screen-reader-text">' . 
-                     ($current_status === 'on' ? __('Protected from import overwriting', 'alchemer-reviews') : 
-                                               __('Can be overwritten during import', 'alchemer-reviews')) . 
+                     ($current_status === 'on' ? __('Protected from import overwriting', 'alchemer-multi-resort-reviews') : 
+                                               __('Can be overwritten during import', 'alchemer-multi-resort-reviews')) . 
                      '</span>';
                 echo '</div>';
                 break;
@@ -366,7 +366,7 @@ class Alchemer_Reviews_Post_Types {
      * @return void
      */
     public function sort_reviews_by_custom_column( $query ) {
-        if ( ! is_admin() || ! $query->is_main_query() || $query->get( 'post_type' ) !== 'alchemer-review' ) {
+        if ( ! is_admin() || ! $query->is_main_query() || $query->get( 'post_type' ) !== 'amrr-review' ) {
             return;
         }
         
@@ -403,18 +403,18 @@ class Alchemer_Reviews_Post_Types {
      */
     private function get_review_decision_label( $decision, $reviewed ) {
         if ( $decision === 'accepted' ) {
-            return __( 'Accepted', 'alchemer-reviews' );
+            return __( 'Accepted', 'alchemer-multi-resort-reviews' );
         }
 
         if ( $decision === 'rejected' ) {
-            return __( 'Rejected', 'alchemer-reviews' );
+            return __( 'Rejected', 'alchemer-multi-resort-reviews' );
         }
 
         if ( $reviewed === '1' ) {
-            return __( 'Reviewed', 'alchemer-reviews' );
+            return __( 'Reviewed', 'alchemer-multi-resort-reviews' );
         }
 
-        return __( 'Pending Review', 'alchemer-reviews' );
+        return __( 'Pending Review', 'alchemer-multi-resort-reviews' );
     }
 
     /**
@@ -427,7 +427,7 @@ class Alchemer_Reviews_Post_Types {
         $rating = intval( $rating );
         
         if ( $rating <= 0 ) {
-            return '<span class="rating-text">' . __( 'No rating', 'alchemer-reviews' ) . '</span>';
+            return '<span class="rating-text">' . __( 'No rating', 'alchemer-multi-resort-reviews' ) . '</span>';
         }
         
         $stars = '';
@@ -458,7 +458,7 @@ class Alchemer_Reviews_Post_Types {
     public function enqueue_admin_scripts( $hook ) {
         $screen = get_current_screen();
 
-        if ( ! $screen || 'alchemer-review' !== $screen->post_type ) {
+        if ( ! $screen || 'amrr-review' !== $screen->post_type ) {
             return;
         }
 
@@ -467,12 +467,12 @@ class Alchemer_Reviews_Post_Types {
         }
 
         wp_register_style(
-            'alchemer-reviews-admin',
-            ALCHEMER_REVIEWS_PLUGIN_URL . 'assets/css/admin.css',
+            'alchemer-multi-resort-reviews-admin',
+            AMRR_PLUGIN_URL . 'assets/css/admin.css',
             array(),
-            ALCHEMER_REVIEWS_VERSION
+            AMRR_VERSION
         );
-        wp_enqueue_style( 'alchemer-reviews-admin' );
+        wp_enqueue_style( 'alchemer-multi-resort-reviews-admin' );
 
         if ( 'edit.php' !== $hook ) {
             return;
@@ -480,8 +480,8 @@ class Alchemer_Reviews_Post_Types {
 
         // Enqueue Tailwind and plugin button styles for the reviews list page
         $tailwind_url = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
-        $admin_tailwind_url = ALCHEMER_REVIEWS_PLUGIN_URL . 'assets/css/admin-tailwind.css';
-        $admin_tailwind_override_url = ALCHEMER_REVIEWS_PLUGIN_URL . 'assets/css/admin-tailwind-override.css';
+        $admin_tailwind_url = AMRR_PLUGIN_URL . 'assets/css/admin-tailwind.css';
+        $admin_tailwind_override_url = AMRR_PLUGIN_URL . 'assets/css/admin-tailwind-override.css';
         if ( defined('WP_DEBUG') && WP_DEBUG ) {
             error_log('Enqueuing Tailwind: ' . $tailwind_url);
             error_log('Enqueuing admin-tailwind: ' . $admin_tailwind_url);
@@ -497,35 +497,35 @@ class Alchemer_Reviews_Post_Types {
             'alchemer-tailwind-admin',
             $admin_tailwind_url,
             array('tailwind-alchemer'),
-            ALCHEMER_REVIEWS_VERSION
+            AMRR_VERSION
         );
         wp_enqueue_style(
             'alchemer-tailwind-override',
             $admin_tailwind_override_url,
             array('tailwind-alchemer', 'alchemer-tailwind-admin'),
-            ALCHEMER_REVIEWS_VERSION . '.' . time()
+            AMRR_VERSION . '.' . time()
         );
         
         // Register and enqueue JavaScript
         wp_register_script(
-            'alchemer-reviews-admin',
-            ALCHEMER_REVIEWS_PLUGIN_URL . 'assets/js/admin.js',
+            'alchemer-multi-resort-reviews-admin',
+            AMRR_PLUGIN_URL . 'assets/js/admin.js',
             array( 'jquery' ),
-            ALCHEMER_REVIEWS_VERSION,
+            AMRR_VERSION,
             true
         );
-        wp_enqueue_script( 'alchemer-reviews-admin' );
+        wp_enqueue_script( 'alchemer-multi-resort-reviews-admin' );
         
         // Localize script with data for AJAX
         wp_localize_script(
-            'alchemer-reviews-admin',
+            'alchemer-multi-resort-reviews-admin',
             'alchemerReviewsAdmin',
             array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-                'toggleSkipText' => __( 'Toggling skip overwrite status...', 'alchemer-reviews' ),
-                'errorText' => __( 'Error: ', 'alchemer-reviews' ),
-                'protectedText' => __( 'Protected from import overwriting', 'alchemer-reviews' ),
-                'unprotectedText' => __( 'Can be overwritten during import', 'alchemer-reviews' ),
+                'toggleSkipText' => __( 'Toggling skip overwrite status...', 'alchemer-multi-resort-reviews' ),
+                'errorText' => __( 'Error: ', 'alchemer-multi-resort-reviews' ),
+                'protectedText' => __( 'Protected from import overwriting', 'alchemer-multi-resort-reviews' ),
+                'unprotectedText' => __( 'Can be overwritten during import', 'alchemer-multi-resort-reviews' ),
                 'nonce' => wp_create_nonce( 'test_alchemer_api_connection' ),
             )
         );
@@ -550,7 +550,7 @@ class Alchemer_Reviews_Post_Types {
         // Check if we have the required data
         if ( ! isset( $_POST['post_id'] ) || ! isset( $_POST['nonce'] ) || ! isset( $_POST['status'] ) ) {
             wp_send_json_error( array(
-                'message' => __( 'Missing required data', 'alchemer-reviews' ),
+                'message' => __( 'Missing required data', 'alchemer-multi-resort-reviews' ),
             ) );
         }
         
@@ -562,22 +562,22 @@ class Alchemer_Reviews_Post_Types {
         // Verify nonce
         if ( ! wp_verify_nonce( $nonce, 'alchemer_toggle_skip_overwrite_' . $post_id ) ) {
             wp_send_json_error( array(
-                'message' => __( 'Security check failed', 'alchemer-reviews' ),
+                'message' => __( 'Security check failed', 'alchemer-multi-resort-reviews' ),
             ) );
         }
         
         // Verify user capabilities
         if ( ! current_user_can( 'edit_post', $post_id ) ) {
             wp_send_json_error( array(
-                'message' => __( 'You do not have permission to edit this review', 'alchemer-reviews' ),
+                'message' => __( 'You do not have permission to edit this review', 'alchemer-multi-resort-reviews' ),
             ) );
         }
         
         // Get the post to verify it exists and is a review
         $post = get_post( $post_id );
-        if ( ! $post || 'alchemer-review' !== $post->post_type ) {
+        if ( ! $post || 'amrr-review' !== $post->post_type ) {
             wp_send_json_error( array(
-                'message' => __( 'Invalid review', 'alchemer-reviews' ),
+                'message' => __( 'Invalid review', 'alchemer-multi-resort-reviews' ),
             ) );
         }
         
@@ -587,13 +587,13 @@ class Alchemer_Reviews_Post_Types {
         
         if ( $result ) {
             wp_send_json_success( array(
-                'message' => __( 'Status updated successfully', 'alchemer-reviews' ),
+                'message' => __( 'Status updated successfully', 'alchemer-multi-resort-reviews' ),
                 'new_status' => $new_status === '1' ? 'on' : 'off',
                 'post_id' => $post_id,
             ) );
         } else {
             wp_send_json_error( array(
-                'message' => __( 'Failed to update status', 'alchemer-reviews' ),
+                'message' => __( 'Failed to update status', 'alchemer-multi-resort-reviews' ),
             ) );
         }
     }

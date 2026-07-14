@@ -1,21 +1,21 @@
-<div class="alchemer-reviews alchemer-reviews-grid">
+<div class="alchemer-multi-resort-reviews alchemer-multi-resort-reviews-grid">
     <?php if (!empty($atts['title'])): ?>
-        <h2 class="alchemer-reviews-title"><?php echo esc_html($atts['title']); ?></h2>
+        <h2 class="alchemer-multi-resort-reviews-title"><?php echo esc_html($atts['title']); ?></h2>
     <?php endif; ?>
     
     <div class="alchemer-grid-container">
         <?php foreach ($reviews as $review) : ?>
             <div class="alchemer-grid-item">
-                <div class="alchemer-reviewer-info">
-                    <div class="alchemer-reviewer-meta">
-                        <h3 class="alchemer-reviewer-name"><?php echo esc_html($review['name']); ?></h3>
-                        <div class="alchemer-review-date"><?php echo date('F j, Y', strtotime($review['date'])); ?></div>
+                <div class="amrr-reviewer-info">
+                    <div class="amrr-reviewer-meta">
+                        <h3 class="amrr-reviewer-name"><?php echo esc_html($review['name']); ?></h3>
+                        <div class="amrr-review-date"><?php echo date('F j, Y', strtotime($review['date'])); ?></div>
                     </div>
                 </div>
-                <div class="alchemer-review-rating">
+                <div class="amrr-review-rating">
                     <?php echo $this->generate_stars($review['rating']); ?>
                 </div>
-                <div class="alchemer-review-content">
+                <div class="amrr-review-content">
                     <?php echo wp_trim_words(wpautop($review['content']), 30, '...'); ?>
                 </div>
             </div>

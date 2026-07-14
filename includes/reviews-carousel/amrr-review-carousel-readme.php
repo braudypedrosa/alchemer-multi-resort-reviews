@@ -23,15 +23,15 @@ Alchemer Review Carousel is a WordPress plugin that displays customer reviews fr
 The plugin provides three main shortcodes to display reviews in different layouts:
 
 1. List Layout
-  [alchemer_reviews_list]
+  [amrr_list]
   Displays reviews in a vertical list format.
 
 2. Grid Layout
-  [alchemer_reviews_grid]
+  [amrr_grid]
   Displays reviews in a grid layout with navigation arrows.
 
 3. Testimonial Carousel
-  [alchemer_reviews_testimonial]
+  [amrr_testimonial]
   Displays reviews in a testimonial carousel with smooth animations.
 
 == Parameters ==
@@ -41,56 +41,56 @@ All shortcodes accept the following common parameters:
 1. title
   Description: The heading text displayed above the reviews.
   Default: "What Our Customers Say" (list/grid) or "Customer Testimonials" (testimonial)
-  Example: [alchemer_reviews_list title="Client Feedback"]
+  Example: [amrr_list title="Client Feedback"]
 
 2. count
   Description: The number of reviews to display. Use -1 to show all reviews.
   Default: 3
-  Example: [alchemer_reviews_grid count="5"]
+  Example: [amrr_grid count="5"]
 
 3. demo
   Description: Whether to use demo data instead of actual reviews.
   Default: false
-  Example: [alchemer_reviews_testimonial demo="true"]
+  Example: [amrr_testimonial demo="true"]
 
 Testimonial Carousel Specific Parameters:
 
 4. slides_to_show
   Description: The number of slides to display at once. Responsive design will adjust this on smaller screens.
   Default: 1
-  Example: [alchemer_reviews_testimonial slides_to_show="3"]
+  Example: [amrr_testimonial slides_to_show="3"]
 
 5. center_mode
   Description: Whether to enable center mode, which highlights the active slide and shows partial views of adjacent slides.
   Default: false
-  Example: [alchemer_reviews_testimonial center_mode="true"]
+  Example: [amrr_testimonial center_mode="true"]
 
 == Usage Examples ==
 
 Basic Usage:
-[alchemer_reviews_list]
-[alchemer_reviews_grid]
-[alchemer_reviews_testimonial]
+[amrr_list]
+[amrr_grid]
+[amrr_testimonial]
 
 With Common Parameters:
-[alchemer_reviews_list title="Customer Feedback" count="5"]
-[alchemer_reviews_grid title="Recent Reviews" count="6" demo="false"]
-[alchemer_reviews_testimonial title="What People Say" count="-1" demo="true"]
+[amrr_list title="Customer Feedback" count="5"]
+[amrr_grid title="Recent Reviews" count="6" demo="false"]
+[amrr_testimonial title="What People Say" count="-1" demo="true"]
 
 Testimonial Carousel with Multiple Slides:
-[alchemer_reviews_testimonial slides_to_show="3" title="Customer Testimonials"]
+[amrr_testimonial slides_to_show="3" title="Customer Testimonials"]
 This will display 3 testimonials at once in the carousel.
 
 Testimonial Carousel with Center Mode:
-[alchemer_reviews_testimonial center_mode="true" title="Featured Reviews"]
+[amrr_testimonial center_mode="true" title="Featured Reviews"]
 This will enable center mode, highlighting the active slide.
 
 Combining Multiple Parameters:
-[alchemer_reviews_testimonial slides_to_show="3" center_mode="true" title="What Our Clients Say" count="9" demo="true"]
+[amrr_testimonial slides_to_show="3" center_mode="true" title="What Our Clients Say" count="9" demo="true"]
 This will display 3 demo testimonials at once with center mode enabled.
 
 In a Template File:
-<?php echo do_shortcode('[alchemer_reviews_testimonial slides_to_show="3" center_mode="true"]'); ?>
+<?php echo do_shortcode('[amrr_testimonial slides_to_show="3" center_mode="true"]'); ?>
 
 == Review Data Structure ==
 
@@ -105,7 +105,7 @@ The plugin pulls data from the "Reviews" post type with the following structure:
 
 The plugin includes demo data that can be displayed by setting the demo parameter to true. This is useful for testing or when you don't have any reviews yet.
 
-[alchemer_reviews_list demo="true"]
+[amrr_list demo="true"]
 
 == Layout Details ==
 
@@ -147,27 +147,27 @@ The plugin includes default styling that should work with most WordPress themes.
 CSS Classes:
 
 Common Classes:
-- .alchemer-reviews - Main container for all layouts
-- .alchemer-reviews-title - Title heading
+- .alchemer-multi-resort-reviews - Main container for all layouts
+- .alchemer-multi-resort-reviews-title - Title heading
 - .alchemer-star - Star rating icons
 - .alchemer-nav-button - Navigation buttons
 
 List Layout Classes:
-- .alchemer-reviews-list - List layout container
-- .alchemer-review-item - Individual review container
-- .alchemer-reviewer-name - Reviewer name
-- .alchemer-review-date - Review date
-- .alchemer-review-rating - Rating container
-- .alchemer-review-content - Review content
+- .alchemer-multi-resort-reviews-list - List layout container
+- .amrr-review-item - Individual review container
+- .amrr-reviewer-name - Reviewer name
+- .amrr-review-date - Review date
+- .amrr-review-rating - Rating container
+- .amrr-review-content - Review content
 
 Grid Layout Classes:
-- .alchemer-reviews-grid - Grid layout container
+- .alchemer-multi-resort-reviews-grid - Grid layout container
 - .alchemer-grid-container - Grid items container
 - .alchemer-grid-item - Individual grid item
 - .alchemer-grid-navigation - Grid navigation container
 
 Testimonial Layout Classes:
-- .alchemer-reviews-testimonial - Testimonial layout container
+- .alchemer-multi-resort-reviews-testimonial - Testimonial layout container
 - .alchemer-testimonial-slider - Slider container
 - .alchemer-testimonial-track - Track that holds all slides
 - .alchemer-testimonial-slide - Individual slide
@@ -181,7 +181,7 @@ No Reviews Displaying:
 If no reviews are displaying, check the following:
 1. Ensure you have published reviews in the "Reviews" post type
 2. Check that your reviews have the required meta fields (_alchemer_rating and _alchemer_review_date)
-3. Try using the demo parameter: [alchemer_reviews_list demo="true"]
+3. Try using the demo parameter: [amrr_list demo="true"]
 
 Styling Issues:
 If you experience styling issues:
