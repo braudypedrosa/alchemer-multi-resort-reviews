@@ -218,6 +218,12 @@
 }
 
 /* Buttons */
+.amrr-import-control {
+    box-sizing: border-box;
+    height: 42px;
+    min-height: 42px;
+}
+
 .alchemer-button {
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;

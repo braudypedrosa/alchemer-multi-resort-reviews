@@ -207,7 +207,7 @@ class AMRR_Importer {
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             <div>
                                 <label for="amrr-import-resort" class="block text-sm font-medium text-gray-700 mb-1"><?php esc_html_e( 'Property', 'alchemer-multi-resort-reviews' ); ?></label>
-                                <select id="amrr-import-resort" class="form-input block w-full">
+                                <select id="amrr-import-resort" class="form-input amrr-import-control block w-full">
                                     <?php foreach ( $resorts as $resort ) : ?>
                                         <option value="<?php echo esc_attr( $resort['slug'] ); ?>"><?php echo esc_html( $resort['name'] ); ?></option>
                                     <?php endforeach; ?>
@@ -215,11 +215,11 @@ class AMRR_Importer {
                             </div>
                             <div>
                                 <label for="max-reviews" class="block text-sm font-medium text-gray-700 mb-1"><?php esc_html_e( 'Maximum Reviews per Property', 'alchemer-multi-resort-reviews' ); ?></label>
-                                <input type="number" id="max-reviews" min="1" max="100" value="10" class="form-input block w-full">
+                                <input type="number" id="max-reviews" min="1" max="100" value="10" class="form-input amrr-import-control block w-full">
                             </div>
                             <div>
                                 <label for="target-rating" class="block text-sm font-medium text-gray-700 mb-1"><?php esc_html_e( 'Filter by Rating', 'alchemer-multi-resort-reviews' ); ?></label>
-                                <select id="target-rating" class="form-input block w-full">
+                                <select id="target-rating" class="form-input amrr-import-control block w-full">
                                     <option value="0"><?php esc_html_e( 'Use property minimum rating', 'alchemer-multi-resort-reviews' ); ?></option>
                                     <?php for ( $rating = 5; $rating >= 1; $rating-- ) : ?>
                                         <option value="<?php echo intval( $rating ); ?>"><?php echo esc_html( sprintf( _n( '%d star only', '%d stars only', $rating, 'alchemer-multi-resort-reviews' ), $rating ) ); ?></option>
